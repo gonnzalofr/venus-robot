@@ -1,10 +1,21 @@
-include <libpynq.h>
+#include <libpynq.h>
 #include <iic.h>
 #include "vl53l0x.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h> // Added for signal handling
+#include <stdbool.h>
+
+volatile bool running = true;
+
+void handle_sigint(int sig) {
+    running = false;
+}
 
 int main(void) {
+    // Register the signal handler
+    signal(SIGINT, handle_sigint);
+
     pynq_init();
 
     // Route I2C0 to the physical AR_SCL and AR_SDA pins
@@ -16,16 +27,17 @@ int main(void) {
     // Initialize sensor at default address 0x29
     int status = tofInit(&sensor, IIC0, 0x29, 0);
 
-    if (status != 0) {
+    if(status != 0) {
         printf("ERROR: Sensor init failed\n");
         iic_destroy(IIC0);
         pynq_destroy();
         return EXIT_FAILURE;
     }
 
-    printf("VL53L0X Initialized!\n");
+    printf("VL53L0X Initialized! Press Ctrl+C to exit.\n");
 
-    while (1) {
+    // Loop until Ctrl+C is pressed
+    while (running) {
         uint32_t distance = tofReadDistance(&sensor);
         printf("Distance: %u mm\n", distance);
         fflush(stdout);
@@ -33,6 +45,8 @@ int main(void) {
         sleep_msec(500); 
     }
 
+    // Now this will run when you press Ctrl+C!
+    printf("\nCleaning up...\n");
     iic_destroy(IIC0);
     pynq_destroy();
     return EXIT_SUCCESS;
