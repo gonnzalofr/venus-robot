@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(C:/Users/20252331/Documents/GitHub/Venus/.venv/Scripts/python.exe -c ' *)",
+      "Bash(python *)"
+    ]
+  }
+}
