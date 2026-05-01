@@ -534,10 +534,14 @@ def render_robot(
     pygame.draw.circle(surf, draw_color, (rx, ry), ROBOT_RADIUS)
     pygame.draw.circle(surf, C_WHITE,    (rx, ry), ROBOT_RADIUS, 2)
 
-    # Heading line: 0° = east (+x on screen), 90° = north (−y on screen)
-    rad = math.radians(robot.heading)
-    hx  = rx + int(HEADING_LEN * math.cos(rad))
-    hy  = ry - int(HEADING_LEN * math.sin(rad))   # screen y is inverted
+    # Nose line — Pygame clockwise convention: 0°=East, 90°=Down, 270°=Up.
+    # Screen y increases downward, so hy = ry + sin(rad) (no negation):
+    #   270° → sin(270°)=-1 → hy = ry - nose → above robot → UP   ✓
+    #    90° → sin(90°) =+1 → hy = ry + nose → below robot → DOWN ✓
+    rad         = math.radians(robot.heading)
+    nose_length = ROBOT_RADIUS + 10
+    hx = rx + int(nose_length * math.cos(rad))
+    hy = ry + int(nose_length * math.sin(rad))
     pygame.draw.line(surf, C_WHITE, (rx, ry), (hx, hy), 3)
 
     lbl = font.render(label, True, C_WHITE)
@@ -912,17 +916,15 @@ def run_dashboard() -> None:
     # merge_into_world() receives real telemetry (last_seen stays 0 until then,
     # so the robots render in the "stale" dimmed style as a visual hint).
     #
-    # Heading convention: 0 = East, 90 = North, 270 = South (CCW positive).
-    # The render_robot() formula is:  hy = ry - HEADING_LEN * sin(heading_rad)
-    # so heading=90  → hy decreases → line points UP   (North on screen) ✓
-    #    heading=270 → hy increases → line points DOWN  (South on screen) ✓
+    # Heading convention (Pygame clockwise): 0=East, 90=Down, 180=West, 270=Up.
+    # render_robot uses  hy = ry + sin(rad)  — no negation — matching screen-y-down.
     world.robot_a.x       =   0.0
-    world.robot_a.y       = -ROBOT_RADIUS   # tangent spawn: centre at (0, -R)
-    world.robot_a.heading =  90.0           # facing North (up)
+    world.robot_a.y       =  ROBOT_RADIUS   # tangent spawn: centre at (0, +R) — top
+    world.robot_a.heading = 270.0           # sin(270°)=-1 → hy=ry-nose → UP   ✓
 
     world.robot_b.x       =   0.0
-    world.robot_b.y       =  ROBOT_RADIUS   # tangent spawn: centre at (0, +R)
-    world.robot_b.heading = 270.0           # facing South (down)
+    world.robot_b.y       = -ROBOT_RADIUS   # tangent spawn: centre at (0, -R) — bottom
+    world.robot_b.heading =  90.0           # sin(90°) =+1 → hy=ry+nose → DOWN ✓
 
     # ── Step 2: MQTT bridge (window is already open; failure is non-fatal) ─────
     print(f"[INIT] Connecting to MQTT broker {MQTT_BROKER}:{MQTT_PORT}...")
