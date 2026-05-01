@@ -190,9 +190,13 @@ def run() -> None:
     client.loop_start()
     print("[MOCK] Connected.  Publishing at 10 Hz — Ctrl-C to stop.\n")
 
-    tick  = 0
-    theta_a = 0.0   # Robot A starts on the +X axis (East)
-    theta_b = math.pi   # Robot B starts on the -X axis (West), opposite side
+    tick    = 0
+    theta_a = 0.0         # Robot A starts on the +X axis (East)
+    theta_b = math.pi     # Robot B starts on the -X axis (West), opposite side
+    prev_xa = RADIUS_A    # track previous position for delta reporting
+    prev_ya = 0.0
+    prev_xb = RADIUS_B * math.cos(math.pi)
+    prev_yb = RADIUS_B * math.sin(math.pi)
 
     try:
         while True:
@@ -229,14 +233,19 @@ def run() -> None:
             client.publish(TOPIC_A, payload_a)
             client.publish(TOPIC_B, payload_b)
 
-            # Console feedback on every object-refresh tick
-            if tick % OBJECT_EVERY == 0:
-                print(
-                    f"[tick {tick:05d}] "
-                    f"A({xa:7.1f}, {ya:7.1f}, {ha:5.1f}°)  "
-                    f"B({xb:7.1f}, {yb:7.1f}, {hb:5.1f}°)  "
-                    f"[objects sent]"
-                )
+            # Print every tick so you can confirm coordinates are changing.
+            # Δ shows displacement from the previous tick — should be ~5 units.
+            da = math.hypot(xa - prev_xa, ya - prev_ya)
+            db = math.hypot(xb - prev_xb, yb - prev_yb)
+            obj_tag = " [objects]" if tick % OBJECT_EVERY == 0 else ""
+            print(
+                f"[tick {tick:05d}] "
+                f"A({xa:7.2f}, {ya:7.2f})  Δ={da:.2f}  "
+                f"B({xb:7.2f}, {yb:7.2f})  Δ={db:.2f}"
+                f"{obj_tag}"
+            )
+            prev_xa, prev_ya = xa, ya
+            prev_xb, prev_yb = xb, yb
 
             tick += 1
             time.sleep(TICK_RATE)

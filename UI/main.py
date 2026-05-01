@@ -42,6 +42,7 @@ Usage
 import collections   # PHASE 2: deque for trail history
 import json
 import math
+import random
 import sys
 import threading
 import time
@@ -220,60 +221,67 @@ def parse_mqtt_message(topic: str, payload: str) -> dict:
         data = json.loads(payload)
     except json.JSONDecodeError as exc:
         print(f"[PARSE] Bad JSON on {topic}: {exc}")
+        print(f"[PARSE] Raw payload was: {payload[:200]}")
         return {}
 
-    result: dict = {}
+    try:
+        result: dict = {}
 
-    # ── Robot self-pose ───────────────────────────────────────────────────────
-    robot = data.get("robot", {})
-    result["robot_x"]       = float(robot.get("x",       0))
-    result["robot_y"]       = float(robot.get("y",       0))
-    result["robot_heading"] = float(robot.get("heading", 0))
+        # ── Robot self-pose ───────────────────────────────────────────────────────
+        robot = data.get("robot", {})
+        result["robot_x"]       = float(robot.get("x",       0))
+        result["robot_y"]       = float(robot.get("y",       0))
+        result["robot_heading"] = float(robot.get("heading", 0))
 
-    # ── Detected objects ──────────────────────────────────────────────────────
-    objs = data.get("objects", {})
+        # ── Detected objects ──────────────────────────────────────────────────────
+        objs = data.get("objects", {})
 
-    result["cubes"] = [
-        Cube(
-            x      = float(c.get("x", 0)),
-            y      = float(c.get("y", 0)),
-            obj_id = str(c.get("id", "")),
-            color  = str(c.get("color", "yellow")).lower(),
-        )
-        for c in objs.get("cubes", [])
-    ]
+        result["cubes"] = [
+            Cube(
+                x      = float(c.get("x", 0)),
+                y      = float(c.get("y", 0)),
+                obj_id = str(c.get("id", "")),
+                color  = str(c.get("color", "yellow")).lower(),
+            )
+            for c in objs.get("cubes", [])
+        ]
 
-    result["hills"] = [
-        Hill(
-            x      = float(h.get("x", 0)),
-            y      = float(h.get("y", 0)),
-            radius = float(h.get("radius", 40)),
-        )
-        for h in objs.get("hills", [])
-    ]
+        result["hills"] = [
+            Hill(
+                x      = float(h.get("x", 0)),
+                y      = float(h.get("y", 0)),
+                radius = float(h.get("radius", 40)),
+            )
+            for h in objs.get("hills", [])
+        ]
 
-    # Craters: BLACK TAPE — parsed identically to boundaries
-    result["craters"] = [
-        Crater(
-            x      = float(cr.get("x", 0)),
-            y      = float(cr.get("y", 0)),
-            radius = float(cr.get("radius", 30)),
-        )
-        for cr in objs.get("craters", [])
-    ]
+        # Craters: BLACK TAPE — parsed identically to boundaries
+        result["craters"] = [
+            Crater(
+                x      = float(cr.get("x", 0)),
+                y      = float(cr.get("y", 0)),
+                radius = float(cr.get("radius", 30)),
+            )
+            for cr in objs.get("craters", [])
+        ]
 
-    # Boundaries: BLACK TAPE — parsed identically to craters (same style)
-    result["boundaries"] = [
-        Boundary(
-            x1 = float(b.get("x1", 0)),
-            y1 = float(b.get("y1", 0)),
-            x2 = float(b.get("x2", 0)),
-            y2 = float(b.get("y2", 0)),
-        )
-        for b in objs.get("boundaries", [])
-    ]
+        # Boundaries: BLACK TAPE — parsed identically to craters (same style)
+        result["boundaries"] = [
+            Boundary(
+                x1 = float(b.get("x1", 0)),
+                y1 = float(b.get("y1", 0)),
+                x2 = float(b.get("x2", 0)),
+                y2 = float(b.get("y2", 0)),
+            )
+            for b in objs.get("boundaries", [])
+        ]
 
-    return result
+        return result
+
+    except (KeyError, TypeError, ValueError) as exc:
+        print(f"[PARSE] Field error on {topic}: {type(exc).__name__}: {exc}")
+        print(f"[PARSE] Parsed data was: {data}")
+        return {}
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -736,21 +744,30 @@ class MQTTBridge:
         self._lock       = threading.Lock()
         self._inbox: dict = {}   # topic → {"parsed": dict, "timestamp": float}
 
+        # Unique client ID prevents the broker kicking a stale session with the
+        # same name, which would silently disconnect this subscriber in a loop.
+        _cid = f"dashboard_{random.randint(10000, 99999)}"
+        print(f"[MQTT] Subscriber client_id = {_cid}")
+
         # paho ≥ 2.0 added a mandatory callback_api_version argument.
         # We try the new API first and fall back to the legacy constructor.
         try:
             self._client = mqtt.Client(
                 callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
-                client_id="arena_dashboard",
+                client_id=_cid,
             )
         except AttributeError:
             # paho < 2.0
-            self._client = mqtt.Client(client_id="arena_dashboard")
+            self._client = mqtt.Client(client_id=_cid)
 
+        # Callbacks MUST be bound before connect() so paho's background thread
+        # can invoke them as soon as the CONNACK / first message arrives.
         self._client.username_pw_set(username, password)
         self._client.on_connect    = self._on_connect
         self._client.on_disconnect = self._on_disconnect
         self._client.on_message    = self._on_message
+        print(f"[MQTT] Callbacks bound: on_connect={self._on_connect.__name__}, "
+              f"on_message={self._on_message.__name__}")
 
     # ── paho callbacks  (all called from the background thread) ───────────────
 
@@ -772,17 +789,21 @@ class MQTTBridge:
 
     def _on_message(self, client, userdata, msg) -> None:
         """Receive a message and store the parsed result thread-safely."""
-        topic   = msg.topic
-        payload = msg.payload.decode("utf-8", errors="replace")
-        print(f"[MQTT] ← {topic}  {payload[:100]}")
+        print(f"[RAW MQTT] Topic: {msg.topic} | Payload: {msg.payload}")
+        try:
+            topic   = msg.topic
+            payload = msg.payload.decode("utf-8", errors="replace")
+            print(f"[MQTT] ← {topic}  {payload[:100]}")
 
-        parsed = parse_mqtt_message(topic, payload)
-        if not parsed:
-            return
+            parsed = parse_mqtt_message(topic, payload)
+            if not parsed:
+                return
 
-        # Hold the lock only for the minimal dict-update operation
-        with self._lock:
-            self._inbox[topic] = {"parsed": parsed, "timestamp": time.time()}
+            # Hold the lock only for the minimal dict-update operation
+            with self._lock:
+                self._inbox[topic] = {"parsed": parsed, "timestamp": time.time()}
+        except Exception as e:
+            print(f"[ERROR] Failed to parse message: {e}")
 
     # ── Public API ────────────────────────────────────────────────────────────
 
@@ -867,19 +888,22 @@ def _apply_objects(world: WorldState, parsed: dict) -> None:
 
 def run_dashboard() -> None:
     # ── PHASE 2: Expose the camera globally so a2s()/a2r() can use it ─────────
-    # run_dashboard() is the only entry point that owns the Camera; using a
-    # global variable lets all render helpers pick it up without changing their
-    # function signatures.
     global _camera
 
+    # ── Step 1: Pygame must open its window before anything else ──────────────
+    print("[INIT] Starting Pygame...")
     pygame.init()
+    print("[INIT] Creating display window...")
     screen = pygame.display.set_mode((WIN_W, WIN_H))
     pygame.display.set_caption("Robot Arena Dashboard")
     clock = pygame.time.Clock()
+    print("[INIT] Pygame window open.")
 
+    print("[INIT] Loading fonts...")
     font_title = pygame.font.SysFont("monospace", 17, bold=True)
     font_label = pygame.font.SysFont("monospace", 13, bold=True)
     font_small = pygame.font.SysFont("monospace", 11)
+    print("[INIT] Fonts loaded.")
 
     world  = WorldState()
 
@@ -893,17 +917,21 @@ def run_dashboard() -> None:
     # so heading=90  → hy decreases → line points UP   (North on screen) ✓
     #    heading=270 → hy increases → line points DOWN  (South on screen) ✓
     world.robot_a.x       =   0.0
-    world.robot_a.y       = -30.0   # slightly below origin
-    world.robot_a.heading =  90.0   # facing North (up)
+    world.robot_a.y       = -ROBOT_RADIUS   # tangent spawn: centre at (0, -R)
+    world.robot_a.heading =  90.0           # facing North (up)
 
     world.robot_b.x       =   0.0
-    world.robot_b.y       =  30.0   # slightly above origin
-    world.robot_b.heading = 270.0   # facing South (down)
+    world.robot_b.y       =  ROBOT_RADIUS   # tangent spawn: centre at (0, +R)
+    world.robot_b.heading = 270.0           # facing South (down)
 
+    # ── Step 2: MQTT bridge (window is already open; failure is non-fatal) ─────
+    print(f"[INIT] Connecting to MQTT broker {MQTT_BROKER}:{MQTT_PORT}...")
     bridge = MQTTBridge(MQTT_BROKER, MQTT_PORT, MQTT_USERNAME, MQTT_PASSWORD)
     bridge.start()
+    print("[INIT] MQTT bridge started (dashboard will show 'Waiting for data' until connected).")
 
     # ── PHASE 2: Initialise camera and trail state ─────────────────────────────
+    print("[INIT] Initialising camera and trail state...")
     _camera = Camera()   # activate the dynamic viewport (a2s/a2r now use this)
 
     # One deque per robot; maxlen enforces the ring-buffer cap automatically.
@@ -916,91 +944,109 @@ def run_dashboard() -> None:
     last_seen_b: float = 0.0
     # ──────────────────────────────────────────────────────────────────────────
 
+    print("[INIT] Entering main render loop at", FPS, "FPS.")
     running = True
-    while running:
-        # ── Event handling ────────────────────────────────────────────────────
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+    _last_debug_t = 0.0   # tracks when we last printed the debug line
+    try:
+        while running:
+            # ── Event handling ────────────────────────────────────────────────────
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     running = False
-                elif event.key == pygame.K_r:
-                    bridge.publish(TOPIC_A_RECV, {"cmd": "reset"})
-                    bridge.publish(TOPIC_B_RECV, {"cmd": "reset"})
-                    print("[CMD] reset sent to both robots")
-                # PHASE 2: C key clears both trails (useful after a robot is
-                # repositioned manually so old paths don't confuse the map)
-                elif event.key == pygame.K_c:
-                    trail_a.clear()
-                    trail_b.clear()
-                    print("[UI] trails cleared")
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        running = False
+                    elif event.key == pygame.K_r:
+                        bridge.publish(TOPIC_A_RECV, {"cmd": "reset"})
+                        bridge.publish(TOPIC_B_RECV, {"cmd": "reset"})
+                        print("[CMD] reset sent to both robots")
+                    # PHASE 2: C key clears both trails (useful after a robot is
+                    # repositioned manually so old paths don't confuse the map)
+                    elif event.key == pygame.K_c:
+                        trail_a.clear()
+                        trail_b.clear()
+                        print("[UI] trails cleared")
 
-        # ── Pull MQTT data (one lock acquisition, then release) ───────────────
-        merge_into_world(bridge.snapshot(), world)
+            # ── Pull MQTT data (one lock acquisition, then release) ───────────────
+            merge_into_world(bridge.snapshot(), world)
 
-        # ── PHASE 2: Update trail history and camera viewport ─────────────────
-        # We only record a new sample when last_seen changed, which means a new
-        # MQTT packet arrived since the previous frame.  This prevents filling
-        # the trail with identical duplicate points while a robot is stationary.
+            # ── Visual debug: print robot positions once per second ───────────────
+            _now = time.time()
+            if _now - _last_debug_t >= 1.0:
+                print(
+                    f"[DEBUG] MQTT={'OK' if bridge.connected else 'DISCONNECTED'} | "
+                    f"A=({world.robot_a.x:7.1f}, {world.robot_a.y:7.1f}) "
+                    f"last_seen={world.robot_a.last_seen:.1f} | "
+                    f"B=({world.robot_b.x:7.1f}, {world.robot_b.y:7.1f}) "
+                    f"last_seen={world.robot_b.last_seen:.1f}"
+                )
+                _last_debug_t = _now
 
-        if world.robot_a.last_seen > last_seen_a and world.robot_a.last_seen > 0:
-            # Append the new position to Robot A's history ring-buffer
-            trail_a.append((world.robot_a.x, world.robot_a.y))
-            # Feed the camera: if this point is near or outside the edge the
-            # viewport will expand so the robot stays visible
-            _camera.feed(world.robot_a.x, world.robot_a.y)
-            last_seen_a = world.robot_a.last_seen
+            # ── PHASE 2: Update trail history and camera viewport ─────────────────
+            # We only record a new sample when last_seen changed, which means a new
+            # MQTT packet arrived since the previous frame.  This prevents filling
+            # the trail with identical duplicate points while a robot is stationary.
 
-        if world.robot_b.last_seen > last_seen_b and world.robot_b.last_seen > 0:
-            trail_b.append((world.robot_b.x, world.robot_b.y))
-            _camera.feed(world.robot_b.x, world.robot_b.y)
-            last_seen_b = world.robot_b.last_seen
+            if world.robot_a.last_seen > last_seen_a and world.robot_a.last_seen > 0:
+                # Append the new position to Robot A's history ring-buffer
+                trail_a.append((world.robot_a.x, world.robot_a.y))
+                # Feed the camera: if this point is near or outside the edge the
+                # viewport will expand so the robot stays visible
+                _camera.feed(world.robot_a.x, world.robot_a.y)
+                last_seen_a = world.robot_a.last_seen
 
-        # Also feed detected object positions into the camera so cubes/craters
-        # near the arena edge keep the viewport correctly sized
-        for cube in world.cubes:
-            _camera.feed(cube.x, cube.y)
-        for hill in world.hills:
-            _camera.feed(hill.x, hill.y)
-        for crater in world.craters:
-            _camera.feed(crater.x, crater.y)
-        # ──────────────────────────────────────────────────────────────────────
+            if world.robot_b.last_seen > last_seen_b and world.robot_b.last_seen > 0:
+                trail_b.append((world.robot_b.x, world.robot_b.y))
+                _camera.feed(world.robot_b.x, world.robot_b.y)
+                last_seen_b = world.robot_b.last_seen
 
-        # ── Render ────────────────────────────────────────────────────────────
-        screen.fill(C_BG)
+            # Also feed detected object positions into the camera so cubes/craters
+            # near the arena edge keep the viewport correctly sized
+            for cube in world.cubes:
+                _camera.feed(cube.x, cube.y)
+            for hill in world.hills:
+                _camera.feed(hill.x, hill.y)
+            for crater in world.craters:
+                _camera.feed(crater.x, crater.y)
+            # ──────────────────────────────────────────────────────────────────────
 
-        # Title bar
-        title = font_title.render(
-            "Robot Arena Dashboard   [ESC = quit  |  R = reset  |  C = clear trails]",
-            True, C_TEXT,
-        )
-        screen.blit(title, (10, 14))
+            # ── Render ────────────────────────────────────────────────────────────
+            screen.fill(C_BG)
 
-        # Arena (draw order: bg → hills → boundaries → craters → trails → cubes → robots → HUD)
-        render_arena_bg(screen)
-        render_hills(screen, world.hills)
-        render_boundaries(screen, world.boundaries)
-        render_craters(screen, world.craters)
+            # Title bar
+            title = font_title.render(
+                "Robot Arena Dashboard   [ESC = quit  |  R = reset  |  C = clear trails]",
+                True, C_TEXT,
+            )
+            screen.blit(title, (10, 14))
 
-        # PHASE 2: draw trails before robots so robots render on top
-        render_trails(screen, trail_a, trail_b)
+            # Arena (draw order: bg → hills → boundaries → craters → trails → cubes → robots → HUD)
+            render_arena_bg(screen)
+            render_hills(screen, world.hills)
+            render_boundaries(screen, world.boundaries)
+            render_craters(screen, world.craters)
 
-        render_cubes(screen, world.cubes, font_small)
-        render_robot(screen, world.robot_a, C_ROBOT_A, "A", font_label)
-        render_robot(screen, world.robot_b, C_ROBOT_B, "B", font_label)
+            # PHASE 2: draw trails before robots so robots render on top
+            render_trails(screen, trail_a, trail_b)
 
-        # PHASE 2: HUD overlaid last so it always sits above the arena content
-        render_hud(screen, world, bridge.connected, font_small)
+            render_cubes(screen, world.cubes, font_small)
+            render_robot(screen, world.robot_a, C_ROBOT_A, "A", font_label)
+            render_robot(screen, world.robot_b, C_ROBOT_B, "B", font_label)
 
-        # Info sidebar (unchanged from Phase 1)
-        render_sidebar(screen, world, bridge.connected, font_label, font_small)
+            # PHASE 2: HUD overlaid last so it always sits above the arena content
+            render_hud(screen, world, bridge.connected, font_small)
 
-        pygame.display.flip()
-        clock.tick(FPS)
+            # Info sidebar (unchanged from Phase 1)
+            render_sidebar(screen, world, bridge.connected, font_label, font_small)
 
-    bridge.stop()
-    pygame.quit()
+            pygame.display.flip()
+            clock.tick(FPS)
+    except KeyboardInterrupt:
+        print("\n[SHUTDOWN] Keyboard interrupt — shutting down cleanly.")
+    finally:
+        bridge.stop()
+        pygame.quit()
+        sys.exit(0)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -1015,24 +1061,38 @@ def run_dashboard() -> None:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def run_mock_publisher() -> None:
-    print("[MOCK] Starting mock publisher — Ctrl-C to stop")
+    print("[MOCK] Mock publisher thread started.")
+
+    # Unique ID so the broker never confuses this publisher with the subscriber.
+    _cid = f"mock_pub_{random.randint(10000, 99999)}"
+    print(f"[MOCK] Publisher client_id = {_cid}")
+
     try:
         pub = mqtt.Client(
             callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
-            client_id="mock_pub",
+            client_id=_cid,
         )
     except AttributeError:
-        pub = mqtt.Client(client_id="mock_pub")
+        pub = mqtt.Client(client_id=_cid)
 
     pub.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
 
+    # Start the network loop BEFORE connect() so the background thread is
+    # already running when the TCP socket opens and can flush outgoing packets
+    # immediately without waiting for the next loop_start() call.
+    pub.loop_start()
+    print("[MOCK] Network loop started.")
+
+    print(f"[MOCK] Connecting to {MQTT_BROKER}:{MQTT_PORT}...")
     try:
         pub.connect(MQTT_BROKER, MQTT_PORT)
     except OSError as exc:
-        print(f"[MOCK] Cannot connect: {exc}")
+        print(f"[MOCK] Cannot connect to broker: {exc}")
+        print("[MOCK] Mock thread exiting — dashboard will show 'Waiting for data'.")
+        pub.loop_stop()
         return
 
-    pub.loop_start()
+    print("[MOCK] TCP connect() returned — MQTT handshake completing in background...")
 
     # All coordinates are now origin-centred: (0, 0) is the arena centre.
     # Old values (bottom-left origin) had centre at (250, 250); all positions
@@ -1101,6 +1161,11 @@ def run_mock_publisher() -> None:
 
 if __name__ == "__main__":
     if "--mock" in sys.argv:
-        run_mock_publisher()
+        print("[STARTUP] Mock mode: starting mock publisher in background thread...")
+        mock_thread = threading.Thread(target=run_mock_publisher, daemon=True)
+        mock_thread.start()
+        print("[STARTUP] Mock thread started. Opening dashboard...")
+        run_dashboard()
     else:
+        print("[STARTUP] Normal mode: opening dashboard...")
         run_dashboard()
