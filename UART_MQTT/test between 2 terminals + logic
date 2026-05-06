@@ -14,6 +14,7 @@ robots = {
     "B": {"pos": None, "distance": None, "temp": None, "color": None}
 }
 
+visited_positions = {"A": [], "B": []}
 collision_active = False
 
 # ===== HELPERS =====
@@ -35,14 +36,20 @@ def send(client_A, client_B, robot, msg):
 def handle_logic(client_A, client_B):
     global collision_active
 
-    # Collision check
+    # --- Store positions (mapping) ---
+    for r in robots:
+        if robots[r]["pos"] is not None:
+            if robots[r]["pos"] not in visited_positions[r]:
+                visited_positions[r].append(robots[r]["pos"])
+
+    # --- Collision avoidance ---
     if robots["A"]["pos"] and robots["B"]["pos"]:
         ax, ay = robots["A"]["pos"]
         bx, by = robots["B"]["pos"]
 
         if abs(ax - bx) < 3 and abs(ay - by) < 3:
             if not collision_active:
-                print("Collision risk: stopping both robots")
+                print("Collision risk")
                 send(client_A, client_B, "A", "STOP")
                 send(client_A, client_B, "B", "STOP")
                 collision_active = True
@@ -50,7 +57,7 @@ def handle_logic(client_A, client_B):
         else:
             collision_active = False
 
-    # Individual logic
+    # --- Individual logic ---
     for r in robots:
         d = robots[r]["distance"]
         t = robots[r]["temp"]
@@ -58,44 +65,49 @@ def handle_logic(client_A, client_B):
 
         action_taken = False
 
-        # Distance
-        if d is not None and d < 10:
-            print(f"{r}: obstacle detected (distance)")
+        # 1. Boundary detection (black)
+        if c == "black":
+            print(f"{r}: boundary detected")
+            send(client_A, client_B, r, "STOP")
+            send(client_A, client_B, r, "MOVE;-5")
+            send(client_A, client_B, r, "TURN;90")
+            robots[r]["color"] = None
+            action_taken = True
+
+        # 2. Obstacle (distance)
+        elif d is not None and d < 10:
+            print(f"{r}: obstacle detected")
             send(client_A, client_B, r, "TURN;90")
             robots[r]["distance"] = None
             action_taken = True
 
-        # Temperature
-        elif t is not None and t > 35:
-            print(f"{r}: overheating")
+        # 3. Rock detection (example: green = rock)
+        elif c == "green":
+            print(f"{r}: rock detected")
             send(client_A, client_B, r, "STOP")
-            robots[r]["temp"] = None
-            action_taken = True
 
-        # Color logic
-        elif c is not None:
-            if c == "black":
-                print(f"{r}: boundary detected")
-                send(client_A, client_B, r, "TURN;90")
-
-            elif c in ["red", "blue", "green"]:
-                print(f"{r}: obstacle ({c}) detected")
-                send(client_A, client_B, r, "STOP")
-                send(client_A, client_B, r, "TURN;90")
-
-            elif c == "white":
-                if d is not None and d < 10:
-                    print(f"{r}: white obstacle (close)")
-                    send(client_A, client_B, r, "STOP")
-                    send(client_A, client_B, r, "TURN;90")
-                else:
-                    print(f"{r}: white floor (safe)")
-                    send(client_A, client_B, r, "MOVE;10")
+            # process temperature
+            if t is not None:
+                print(f"{r}: rock temperature = {t}")
 
             robots[r]["color"] = None
             action_taken = True
 
-        # Default movement
+        # 4. Other colored obstacles
+        elif c in ["red", "blue"]:
+            print(f"{r}: obstacle ({c})")
+            send(client_A, client_B, r, "STOP")
+            send(client_A, client_B, r, "TURN;90")
+            robots[r]["color"] = None
+            action_taken = True
+
+        # 5. Temperature fault check
+        elif t is not None and (t < -20 or t > 100):
+            print(f"{r}: invalid temperature")
+            robots[r]["temp"] = None
+            action_taken = True
+
+        # 6. Default movement
         if not action_taken:
             send(client_A, client_B, r, "MOVE;10")
 
@@ -150,7 +162,7 @@ client_B.on_message = on_message
 client_B.connect("mqtt.ics.ele.tue.nl", 1883)
 client_B.subscribe(TOPIC_B_SEND)
 
-print("System running")
+print("System running (report-compliant version)")
 
 client_A.loop_start()
 client_B.loop_start()
