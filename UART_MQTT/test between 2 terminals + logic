@@ -39,6 +39,7 @@ def handle_logic(client_A, client_B):
             send(client_A, client_B, r, "STOP")
             send(client_A, client_B, r, "TURN;90")
             send(client_A, client_B, r, "MOVE;10")
+            robots[r]["distance"] = None
             continue
 
         # temperature
