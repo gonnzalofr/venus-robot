@@ -1,5 +1,10 @@
 import paho.mqtt.client as mqtt
 import time
+import matplotlib
+matplotlib.use("TkAgg")
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.colors import ListedColormap
 
 # ===== TOPICS =====
 TOPIC_A_SEND = "/pynqbridge/robot_66_1/send"
@@ -14,8 +19,31 @@ robots = {
     "B": {"pos": None, "distance": None, "temp": None, "color": None}
 }
 
-visited_positions = {"A": [], "B": []}
 collision_active = False
+map_grid = {}
+update_needed = False
+
+# ===== VISUAL MAP =====
+def show_map():
+    size = 20
+    grid = np.zeros((size, size))
+
+    for (x, y), val in map_grid.items():
+        if 0 <= x < size and 0 <= y < size:
+            if val == "free":
+                grid[y][x] = 1
+            elif val == "obstacle":
+                grid[y][x] = 2
+            elif val == "rock":
+                grid[y][x] = 3
+            elif val == "boundary":
+                grid[y][x] = 4
+
+    plt.clf()
+    cmap = ListedColormap(["white", "lightgray", "red", "green", "black"])
+    plt.imshow(grid, cmap=cmap, vmin=0, vmax=4)
+    plt.title("Robot Map")
+    plt.pause(0.01)
 
 # ===== HELPERS =====
 def get_robot(topic):
@@ -32,17 +60,15 @@ def send(client_A, client_B, robot, msg):
     elif robot == "B":
         client_B.publish(TOPIC_B_RECV, msg)
 
+def update_map(pos, value):
+    if pos is not None:
+        map_grid[pos] = value
+
 # ===== LOGIC =====
 def handle_logic(client_A, client_B):
-    global collision_active
+    global collision_active, update_needed
 
-    # --- Store positions (mapping) ---
-    for r in robots:
-        if robots[r]["pos"] is not None:
-            if robots[r]["pos"] not in visited_positions[r]:
-                visited_positions[r].append(robots[r]["pos"])
-
-    # --- Collision avoidance ---
+    # Collision check
     if robots["A"]["pos"] and robots["B"]["pos"]:
         ax, ay = robots["A"]["pos"]
         bx, by = robots["B"]["pos"]
@@ -57,59 +83,65 @@ def handle_logic(client_A, client_B):
         else:
             collision_active = False
 
-    # --- Individual logic ---
+    # Individual logic
     for r in robots:
+        pos = robots[r]["pos"]
         d = robots[r]["distance"]
         t = robots[r]["temp"]
         c = robots[r]["color"]
 
         action_taken = False
 
-        # 1. Boundary detection (black)
         if c == "black":
             print(f"{r}: boundary detected")
+            update_map(pos, "boundary")
+
             send(client_A, client_B, r, "STOP")
             send(client_A, client_B, r, "MOVE;-5")
             send(client_A, client_B, r, "TURN;90")
+
             robots[r]["color"] = None
             action_taken = True
 
-        # 2. Obstacle (distance)
         elif d is not None and d < 10:
             print(f"{r}: obstacle detected")
+            update_map(pos, "obstacle")
+
             send(client_A, client_B, r, "TURN;90")
+
             robots[r]["distance"] = None
             action_taken = True
 
-        # 3. Rock detection (example: green = rock)
         elif c == "green":
             print(f"{r}: rock detected")
+            update_map(pos, "rock")
+
             send(client_A, client_B, r, "STOP")
 
-            # process temperature
             if t is not None:
                 print(f"{r}: rock temperature = {t}")
 
             robots[r]["color"] = None
             action_taken = True
 
-        # 4. Other colored obstacles
         elif c in ["red", "blue"]:
             print(f"{r}: obstacle ({c})")
+            update_map(pos, "obstacle")
+
             send(client_A, client_B, r, "STOP")
             send(client_A, client_B, r, "TURN;90")
+
             robots[r]["color"] = None
             action_taken = True
 
-        # 5. Temperature fault check
-        elif t is not None and (t < -20 or t > 100):
-            print(f"{r}: invalid temperature")
-            robots[r]["temp"] = None
-            action_taken = True
+        elif pos is not None:
+            update_map(pos, "free")
 
-        # 6. Default movement
         if not action_taken:
             send(client_A, client_B, r, "MOVE;10")
+
+    # trigger map update safely
+    update_needed = True
 
 # ===== MESSAGE HANDLER =====
 def on_message(client, userdata, msg):
@@ -162,10 +194,18 @@ client_B.on_message = on_message
 client_B.connect("mqtt.ics.ele.tue.nl", 1883)
 client_B.subscribe(TOPIC_B_SEND)
 
-print("System running (report-compliant version)")
+print("System running with visual map")
+
+plt.ion()
+plt.figure()
 
 client_A.loop_start()
 client_B.loop_start()
 
+# ===== MAIN LOOP (SAFE GUI UPDATE) =====
 while True:
-    time.sleep(1)
+    if update_needed:
+        show_map()
+        update_needed = False
+
+    time.sleep(0.05)
