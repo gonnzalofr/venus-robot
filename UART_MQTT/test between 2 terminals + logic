@@ -28,6 +28,7 @@ def show_map():
     size = 20
     grid = np.zeros((size, size))
 
+    # terrain
     for (x, y), val in map_grid.items():
         if 0 <= x < size and 0 <= y < size:
             if val == "free":
@@ -39,10 +40,28 @@ def show_map():
             elif val == "boundary":
                 grid[y][x] = 4
 
+    # robots (draw last)
+    for r in robots:
+        pos = robots[r]["pos"]
+        if pos is not None:
+            x, y = pos
+            if 0 <= x < size and 0 <= y < size:
+                grid[y][x] = 5  # robot
+
     plt.clf()
-    cmap = ListedColormap(["white", "lightgray", "red", "green", "black"])
-    plt.imshow(grid, cmap=cmap, vmin=0, vmax=4)
+
+    cmap = ListedColormap([
+        "white",      # unknown
+        "lightgray",  # free
+        "red",        # obstacle
+        "green",      # rock
+        "black",      # boundary
+        "yellow"      # robot (FIXED)
+    ])
+
+    plt.imshow(grid, cmap=cmap, vmin=0, vmax=5)
     plt.title("Robot Map")
+    plt.gca().invert_yaxis()
     plt.pause(0.01)
 
 # ===== HELPERS =====
@@ -68,7 +87,7 @@ def update_map(pos, value):
 def handle_logic(client_A, client_B):
     global collision_active, update_needed
 
-    # Collision check
+    # Collision
     if robots["A"]["pos"] and robots["B"]["pos"]:
         ax, ay = robots["A"]["pos"]
         bx, by = robots["B"]["pos"]
@@ -83,7 +102,7 @@ def handle_logic(client_A, client_B):
         else:
             collision_active = False
 
-    # Individual logic
+    # Robot logic
     for r in robots:
         pos = robots[r]["pos"]
         d = robots[r]["distance"]
@@ -92,6 +111,7 @@ def handle_logic(client_A, client_B):
 
         action_taken = False
 
+        # Boundary
         if c == "black":
             print(f"{r}: boundary detected")
             update_map(pos, "boundary")
@@ -103,6 +123,7 @@ def handle_logic(client_A, client_B):
             robots[r]["color"] = None
             action_taken = True
 
+        # Distance obstacle
         elif d is not None and d < 10:
             print(f"{r}: obstacle detected")
             update_map(pos, "obstacle")
@@ -112,6 +133,7 @@ def handle_logic(client_A, client_B):
             robots[r]["distance"] = None
             action_taken = True
 
+        # Rock
         elif c == "green":
             print(f"{r}: rock detected")
             update_map(pos, "rock")
@@ -124,6 +146,7 @@ def handle_logic(client_A, client_B):
             robots[r]["color"] = None
             action_taken = True
 
+        # Colored obstacles
         elif c in ["red", "blue"]:
             print(f"{r}: obstacle ({c})")
             update_map(pos, "obstacle")
@@ -134,16 +157,16 @@ def handle_logic(client_A, client_B):
             robots[r]["color"] = None
             action_taken = True
 
+        # Free space
         elif pos is not None:
             update_map(pos, "free")
 
         if not action_taken:
             send(client_A, client_B, r, "MOVE;10")
 
-    # trigger map update safely
     update_needed = True
 
-# ===== MESSAGE HANDLER =====
+# ===== MQTT HANDLER =====
 def on_message(client, userdata, msg):
     data = msg.payload.decode()
     topic = msg.topic
@@ -202,7 +225,7 @@ plt.figure()
 client_A.loop_start()
 client_B.loop_start()
 
-# ===== MAIN LOOP (SAFE GUI UPDATE) =====
+# ===== MAIN LOOP =====
 while True:
     if update_needed:
         show_map()
