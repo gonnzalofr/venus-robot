@@ -1,4 +1,5 @@
 import paho.mqtt.client as mqtt
+import time
 
 # ===== TOPICS =====
 TOPIC_A_SEND = "/pynqbridge/robot_66_1/send"
@@ -13,6 +14,8 @@ robots = {
     "B": {"pos": None, "distance": None, "temp": None, "color": None}
 }
 
+collision_active = False
+
 # ===== HELPERS =====
 def get_robot(topic):
     if topic == TOPIC_A_SEND:
@@ -22,99 +25,121 @@ def get_robot(topic):
     return None
 
 def send(client_A, client_B, robot, msg):
-    print(f"Sending to {robot}: {msg}")
+    print(f"→ {robot}: {msg}")
     if robot == "A":
         client_A.publish(TOPIC_A_RECV, msg)
     elif robot == "B":
         client_B.publish(TOPIC_B_RECV, msg)
 
+# ===== LOGIC =====
 def handle_logic(client_A, client_B):
-    for r in robots:
-        d = robots[r]["distance"]
-        c = robots[r]["color"]
-        t = robots[r]["temp"]
+    global collision_active
 
-        # obstacle
-        if d is not None and d < 10:
-            send(client_A, client_B, r, "STOP")
-            send(client_A, client_B, r, "TURN;90")
-            send(client_A, client_B, r, "MOVE;10")
-            robots[r]["distance"] = None
-            continue
-
-        # temperature
-        if t is not None and t > 35:
-            send(client_A, client_B, r, "STOP")
-            continue
-
-        # normal move
-        send(client_A, client_B, r, "MOVE;10")
-
-    # simple collision check
+    # --- Collision check first ---
     if robots["A"]["pos"] and robots["B"]["pos"]:
         ax, ay = robots["A"]["pos"]
         bx, by = robots["B"]["pos"]
-        if abs(ax - bx) < 3 and abs(ay - by) < 3:
-            print("Collision risk → STOP both")
-            send(client_A, client_B, "A", "STOP")
-            send(client_A, client_B, "B", "STOP")
 
-# ===== CALLBACK =====
+        if abs(ax - bx) < 3 and abs(ay - by) < 3:
+            if not collision_active:
+                print("⚠ Collision risk → STOP both")
+                send(client_A, client_B, "A", "STOP")
+                send(client_A, client_B, "B", "STOP")
+                collision_active = True
+            return
+        else:
+            collision_active = False
+
+    # --- Individual robot logic ---
+    for r in robots:
+        d = robots[r]["distance"]
+        t = robots[r]["temp"]
+        c = robots[r]["color"]
+
+        action_taken = False
+
+        # obstacle avoidance
+        if d is not None and d < 10:
+            print(f"{r}: obstacle detected")
+            send(client_A, client_B, r, "TURN;90")
+            robots[r]["distance"] = None
+            action_taken = True
+
+        # temperature safety
+        elif t is not None and t > 35:
+            print(f"{r}: overheating")
+            send(client_A, client_B, r, "STOP")
+            robots[r]["temp"] = None
+            action_taken = True
+
+        # color (black line)
+        elif c == "black":
+            print(f"{r}: black line detected")
+            send(client_A, client_B, r, "TURN;90")
+            robots[r]["color"] = None
+            action_taken = True
+
+        # default movement
+        if not action_taken:
+            send(client_A, client_B, r, "MOVE;10")
+
+# ===== MESSAGE HANDLER =====
 def on_message(client, userdata, msg):
     data = msg.payload.decode()
-    robot = get_robot(msg.topic)
+    topic = msg.topic
 
+    robot = get_robot(topic)
     if robot is None:
         return
 
     print(f"\nRobot {robot}: {data}")
 
-    # parse ;
-    if ";" in data:
-        parts = data.split(";")
-        cmd = parts[0]
-        if cmd == "DIST":
-            robots[robot]["distance"] = int(parts[1])
-        elif cmd == "POS":
-            robots[robot]["pos"] = (int(parts[1]), int(parts[2]))
+    try:
+        # ; format
+        if ";" in data:
+            parts = data.split(";")
+            cmd = parts[0]
 
-    # parse :
-    elif ":" in data:
-        pairs = data.split(",")
-        for p in pairs:
-            key, value = p.split(":")
-            if key == "temp":
-                robots[robot]["temp"] = int(value)
-            elif key == "color":
-                robots[robot]["color"] = value
+            if cmd == "DIST":
+                robots[robot]["distance"] = int(parts[1])
+
+            elif cmd == "POS":
+                robots[robot]["pos"] = (int(parts[1]), int(parts[2]))
+
+        # : format
+        elif ":" in data:
+            pairs = data.split(",")
+            for p in pairs:
+                key, value = p.split(":")
+
+                if key == "temp":
+                    robots[robot]["temp"] = int(value)
+
+                elif key == "color":
+                    robots[robot]["color"] = value
+
+    except:
+        print("Invalid message format")
 
     handle_logic(client_A, client_B)
 
-# ===== CLIENT A (robot_66_1) =====
+# ===== MQTT SETUP =====
 client_A = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 client_A.username_pw_set("robot_66_1", "cSTY2NJS")
 client_A.on_message = on_message
 client_A.connect("mqtt.ics.ele.tue.nl", 1883)
 client_A.subscribe(TOPIC_A_SEND)
 
-# ===== CLIENT B (robot_6_1) =====
 client_B = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 client_B.username_pw_set("robot_6_1", "f8rWApIb")
 client_B.on_message = on_message
 client_B.connect("mqtt.ics.ele.tue.nl", 1883)
 client_B.subscribe(TOPIC_B_SEND)
 
-print("System running (2 robots)...")
+print("System running (improved version)...")
 
 client_A.loop_start()
 client_B.loop_start()
 
-# keep alive
-import time
 while True:
     time.sleep(1)
-
-
-
-
-
