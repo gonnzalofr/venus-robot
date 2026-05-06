@@ -25,7 +25,7 @@ def get_robot(topic):
     return None
 
 def send(client_A, client_B, robot, msg):
-    print(f"→ {robot}: {msg}")
+    print(f"{robot}: {msg}")
     if robot == "A":
         client_A.publish(TOPIC_A_RECV, msg)
     elif robot == "B":
@@ -35,14 +35,14 @@ def send(client_A, client_B, robot, msg):
 def handle_logic(client_A, client_B):
     global collision_active
 
-    # --- Collision check first ---
+    # Collision check
     if robots["A"]["pos"] and robots["B"]["pos"]:
         ax, ay = robots["A"]["pos"]
         bx, by = robots["B"]["pos"]
 
         if abs(ax - bx) < 3 and abs(ay - by) < 3:
             if not collision_active:
-                print("⚠ Collision risk → STOP both")
+                print("Collision risk: stopping both robots")
                 send(client_A, client_B, "A", "STOP")
                 send(client_A, client_B, "B", "STOP")
                 collision_active = True
@@ -50,7 +50,7 @@ def handle_logic(client_A, client_B):
         else:
             collision_active = False
 
-    # --- Individual robot logic ---
+    # Individual logic
     for r in robots:
         d = robots[r]["distance"]
         t = robots[r]["temp"]
@@ -58,28 +58,44 @@ def handle_logic(client_A, client_B):
 
         action_taken = False
 
-        # obstacle avoidance
+        # Distance
         if d is not None and d < 10:
-            print(f"{r}: obstacle detected")
+            print(f"{r}: obstacle detected (distance)")
             send(client_A, client_B, r, "TURN;90")
             robots[r]["distance"] = None
             action_taken = True
 
-        # temperature safety
+        # Temperature
         elif t is not None and t > 35:
             print(f"{r}: overheating")
             send(client_A, client_B, r, "STOP")
             robots[r]["temp"] = None
             action_taken = True
 
-        # color (black line)
-        elif c == "black":
-            print(f"{r}: black line detected")
-            send(client_A, client_B, r, "TURN;90")
+        # Color logic
+        elif c is not None:
+            if c == "black":
+                print(f"{r}: boundary detected")
+                send(client_A, client_B, r, "TURN;90")
+
+            elif c in ["red", "blue", "green"]:
+                print(f"{r}: obstacle ({c}) detected")
+                send(client_A, client_B, r, "STOP")
+                send(client_A, client_B, r, "TURN;90")
+
+            elif c == "white":
+                if d is not None and d < 10:
+                    print(f"{r}: white obstacle (close)")
+                    send(client_A, client_B, r, "STOP")
+                    send(client_A, client_B, r, "TURN;90")
+                else:
+                    print(f"{r}: white floor (safe)")
+                    send(client_A, client_B, r, "MOVE;10")
+
             robots[r]["color"] = None
             action_taken = True
 
-        # default movement
+        # Default movement
         if not action_taken:
             send(client_A, client_B, r, "MOVE;10")
 
@@ -95,7 +111,6 @@ def on_message(client, userdata, msg):
     print(f"\nRobot {robot}: {data}")
 
     try:
-        # ; format
         if ";" in data:
             parts = data.split(";")
             cmd = parts[0]
@@ -106,7 +121,6 @@ def on_message(client, userdata, msg):
             elif cmd == "POS":
                 robots[robot]["pos"] = (int(parts[1]), int(parts[2]))
 
-        # : format
         elif ":" in data:
             pairs = data.split(",")
             for p in pairs:
@@ -136,7 +150,7 @@ client_B.on_message = on_message
 client_B.connect("mqtt.ics.ele.tue.nl", 1883)
 client_B.subscribe(TOPIC_B_SEND)
 
-print("System running (improved version)...")
+print("System running")
 
 client_A.loop_start()
 client_B.loop_start()
