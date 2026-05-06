@@ -53,7 +53,7 @@ def handle_logic(client_A, client_B):
     if robots["A"]["pos"] and robots["B"]["pos"]:
         ax, ay = robots["A"]["pos"]
         bx, by = robots["B"]["pos"]
-        if abs(ax - bx) < 5 and abs(ay - by) < 5:
+        if abs(ax - bx) < 3 and abs(ay - by) < 3:
             print("Collision risk → STOP both")
             send(client_A, client_B, "A", "STOP")
             send(client_A, client_B, "B", "STOP")
@@ -112,3 +112,8 @@ client_B.loop_start()
 import time
 while True:
     time.sleep(1)
+
+
+
+
+
