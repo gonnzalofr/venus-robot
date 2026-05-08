@@ -1,0 +1,399 @@
+/**
+ * robot_main.c  — Venus CBL 5EID0, Group 10
+ * Board: PYNQ-Z2  |  Library: libpynq v0.3.0
+ *
+ * Sensor layout (3× VL53L0X facing forward):
+ *   TOP    → hills (≥30 cm)           → OBSTACLE
+ *   MIDDLE → big cubes (6×6×6 cm)    → BIG_CUBE
+ *   BOTTOM → small cubes (3×3×3 cm)  → SMALL_CUBE
+ *
+ * MQTT payload: (xpos,ypos,type,size,color,temp)
+ */
+
+#include <math.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "libpynq.h"
+
+/* ═══════════════════════════════════════════════════════════════════
+ * CONFIGURATION — calibrate on your actual robot
+ * ═══════════════════════════════════════════════════════════════════ */
+
+/* Stepper / geometry */
+#define STEPS_PER_ROTATION     1600
+#define WHEEL_CIRCUMFERENCE_MM 188.0f
+#define WHEELBASE_MM           130.0f
+#define MM_PER_STEP            (WHEEL_CIRCUMFERENCE_MM / STEPS_PER_ROTATION)
+#define TURN_90_STEPS          868     /* calibrate by measuring actual turn */
+#define MOTOR_SPEED            8000    /* µs between steps */
+
+/* Distance thresholds (mm) */
+#define OBSTACLE_DETECT_MM     250
+#define CUBE_DETECT_MM         120
+#define CUBE_STOP_MM            60
+
+/* Navigation */
+#define SCAN_STEPS             300
+#define BACKUP_STEPS           350
+
+/* VL53L0X I2C 8-bit addresses (default 0x52, reassigned at boot) */
+#define VL53_DEFAULT_ADDR      0x52
+#define VL53_ADDR_BOT          0x54
+#define VL53_ADDR_MID          0x56
+#define VL53_ADDR_TOP          0x58
+#define VL53_REG_SYSRANGE_START        0x00
+#define VL53_REG_RESULT_RANGE_STATUS   0x14
+#define VL53_REG_I2C_SLAVE_DEVICE_ADR  0x8A
+
+/* XSHUT pins for VL53L0X multi-sensor address assignment */
+#define XSHUT_BOT              IO_AR1
+#define XSHUT_MID              IO_AR2
+#define XSHUT_TOP              IO_AR3
+
+/* TCS3200 color sensor */
+#define COLOR_S0               IO_AR4
+#define COLOR_S1               IO_AR5
+#define COLOR_S2               IO_AR6
+#define COLOR_S3               IO_AR7
+#define COLOR_OUT_PIN          IO_AR8  /* routed to PULSECOUNTER0 via switchbox */
+#define COLOR_MEASURE_MS       10      /* pulse counting window per channel */
+
+/* TCRT5000 IR line sensor (cliff / boundary) */
+#define IR_SENSOR_PIN          IO_AR0
+#define CLIFF_TRIGGERED        GPIO_LEVEL_LOW   /* invert if your sensor is opposite */
+
+/* NTC-10K temperature — circuit: 3.3V → 10kΩ → NTC → GND, ADC across NTC */
+#define NTC_ANALOG_CH          ADC0
+#define NTC_FIXED_R            10000.0f
+#define NTC_R0                 10000.0f
+#define NTC_T0_K               298.15f
+#define NTC_BETA               4050.0f
+
+/* UART to ESP32 connectivity board — confirm pin numbers with your sub-team */
+#define UART_ESP_RX_PIN        IO_AR10
+#define UART_ESP_TX_PIN        IO_AR11
+
+/* ═══════════════════════════════════════════════════════════════════
+ * TYPES
+ * ═══════════════════════════════════════════════════════════════════ */
+
+typedef enum { STATE_EXPLORE, STATE_APPROACH_CUBE,
+               STATE_MEASURE_CUBE, STATE_AVOID_OBSTACLE,
+               STATE_AVOID_CLIFF } RobotState;
+
+typedef enum { OBJ_NONE, OBJ_OBSTACLE, OBJ_BIG_CUBE, OBJ_SMALL_CUBE } ObjectType;
+
+typedef enum { COL_RED=0, COL_GREEN, COL_BLUE,
+               COL_WHITE, COL_BLACK, COL_UNKNOWN } SampleColor;
+
+typedef struct { float x_mm, y_mm, heading; } Pose;
+
+/* ═══════════════════════════════════════════════════════════════════
+ * GLOBALS
+ * ═══════════════════════════════════════════════════════════════════ */
+static Pose       g_pose  = {0.0f, 0.0f, 0.0f};
+static RobotState g_state = STATE_EXPLORE;
+
+/* ═══════════════════════════════════════════════════════════════════
+ * DEAD-RECKONING
+ * ═══════════════════════════════════════════════════════════════════ */
+static void pose_update(int sl, int sr) {
+    float dl = sl * MM_PER_STEP, dr = sr * MM_PER_STEP;
+    float dc = (dl + dr) / 2.0f;
+    float dh = (dr - dl) / WHEELBASE_MM * (180.0f / (float)M_PI);
+    float hr  = (g_pose.heading + dh / 2.0f) * (float)M_PI / 180.0f;
+    g_pose.x_mm   += dc * sinf(hr);
+    g_pose.y_mm   += dc * cosf(hr);
+    g_pose.heading += dh;
+    while (g_pose.heading <   0.0f) g_pose.heading += 360.0f;
+    while (g_pose.heading >= 360.0f) g_pose.heading -= 360.0f;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * NAVIGATION PRIMITIVES
+ * ═══════════════════════════════════════════════════════════════════ */
+static void move_forward(int s)  { stepper_steps(s, s);   pose_update(s, s);  }
+static void move_backward(int s) { stepper_steps(-s,-s);  pose_update(-s,-s); }
+static void turn_right_90(void)  { stepper_steps( TURN_90_STEPS,-TURN_90_STEPS);
+                                   pose_update( TURN_90_STEPS,-TURN_90_STEPS); }
+static void turn_left_90(void)   { stepper_steps(-TURN_90_STEPS, TURN_90_STEPS);
+                                   pose_update(-TURN_90_STEPS, TURN_90_STEPS); }
+static void turn_180(void)       { stepper_steps( TURN_90_STEPS*2,-TURN_90_STEPS*2);
+                                   pose_update( TURN_90_STEPS*2,-TURN_90_STEPS*2); }
+static void random_turn(void)    { if (rand()%2) turn_right_90(); else turn_left_90(); }
+
+/* ═══════════════════════════════════════════════════════════════════
+ * SENSOR: IR line (cliff)
+ * ═══════════════════════════════════════════════════════════════════ */
+static int cliff_detected(void) {
+    return gpio_get_level(IR_SENSOR_PIN) == CLIFF_TRIGGERED;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * SENSOR: VL53L0X (3 sensors, IIC0)
+ * ═══════════════════════════════════════════════════════════════════ */
+static int vl53_read_mm(uint8_t addr) {
+    uint8_t cmd = 0x01, status = 0, result[12];
+
+    if (iic_write_register(IIC0, addr, VL53_REG_SYSRANGE_START, &cmd, 1))
+        return 9999;
+
+    for (int i = 0; i < 100; i++) {
+        if (iic_read_register(IIC0, addr, VL53_REG_RESULT_RANGE_STATUS, &status, 1))
+            return 9999;
+        if (status & 0x01) break;
+        sleepus(200);
+    }
+    if (!(status & 0x01)) return 9999;
+
+    if (iic_read_register(IIC0, addr, VL53_REG_RESULT_RANGE_STATUS, result, 12))
+        return 9999;
+
+    return (int)(((uint16_t)result[10] << 8) | result[11]);
+}
+
+static void vl53_assign_addr(uint8_t old_addr, uint8_t new_addr) {
+    iic_write_register(IIC0, old_addr, VL53_REG_I2C_SLAVE_DEVICE_ADR, &new_addr, 1);
+    sleepus(5000);
+}
+
+static void vl53_init_all(void) {
+    gpio_set_direction(XSHUT_BOT, GPIO_DIR_OUTPUT);
+    gpio_set_direction(XSHUT_MID, GPIO_DIR_OUTPUT);
+    gpio_set_direction(XSHUT_TOP, GPIO_DIR_OUTPUT);
+    gpio_set_level(XSHUT_BOT, GPIO_LEVEL_LOW);
+    gpio_set_level(XSHUT_MID, GPIO_LEVEL_LOW);
+    gpio_set_level(XSHUT_TOP, GPIO_LEVEL_LOW);
+    sleepus(10000);
+
+    gpio_set_level(XSHUT_BOT, GPIO_LEVEL_HIGH); sleepus(5000);
+    vl53_assign_addr(VL53_DEFAULT_ADDR, VL53_ADDR_BOT);
+
+    gpio_set_level(XSHUT_MID, GPIO_LEVEL_HIGH); sleepus(5000);
+    vl53_assign_addr(VL53_DEFAULT_ADDR, VL53_ADDR_MID);
+
+    gpio_set_level(XSHUT_TOP, GPIO_LEVEL_HIGH); sleepus(5000);
+    vl53_assign_addr(VL53_DEFAULT_ADDR, VL53_ADDR_TOP);
+}
+
+static ObjectType detect_object(void) {
+    int top = vl53_read_mm(VL53_ADDR_TOP);
+    int mid = vl53_read_mm(VL53_ADDR_MID);
+    int bot = vl53_read_mm(VL53_ADDR_BOT);
+
+    if (top < OBSTACLE_DETECT_MM)                           return OBJ_OBSTACLE;
+    if (mid < CUBE_DETECT_MM && top >= OBSTACLE_DETECT_MM)  return OBJ_BIG_CUBE;
+    if (bot < CUBE_DETECT_MM && mid >= CUBE_DETECT_MM)      return OBJ_SMALL_CUBE;
+    return OBJ_NONE;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * SENSOR: TCS3200 color (hardware pulsecounter)
+ *
+ * S0=HIGH, S1=LOW → 20% output frequency scaling.
+ * Color channel selected via S2/S3 (see datasheet).
+ * Pulses counted by PULSECOUNTER0 over COLOR_MEASURE_MS ms.
+ *
+ * CALIBRATION: record (r,g,b) for each cube colour and update thresholds.
+ * ═══════════════════════════════════════════════════════════════════ */
+static uint32_t count_pulses(void) {
+    uint32_t ts;
+    pulsecounter_reset_count(PULSECOUNTER0);
+    sleepus(COLOR_MEASURE_MS * 1000);
+    return pulsecounter_get_count(PULSECOUNTER0, &ts);
+}
+
+static SampleColor read_color(void) {
+    gpio_set_level(COLOR_S0, GPIO_LEVEL_HIGH);
+    gpio_set_level(COLOR_S1, GPIO_LEVEL_LOW);
+
+    gpio_set_level(COLOR_S2, GPIO_LEVEL_LOW);  gpio_set_level(COLOR_S3, GPIO_LEVEL_LOW);
+    sleepus(5000); uint32_t r = count_pulses();
+
+    gpio_set_level(COLOR_S2, GPIO_LEVEL_HIGH); gpio_set_level(COLOR_S3, GPIO_LEVEL_HIGH);
+    sleepus(5000); uint32_t g = count_pulses();
+
+    gpio_set_level(COLOR_S2, GPIO_LEVEL_LOW);  gpio_set_level(COLOR_S3, GPIO_LEVEL_HIGH);
+    sleepus(5000); uint32_t b = count_pulses();
+
+    printf("[COLOR] R=%u G=%u B=%u\n", r, g, b);
+
+    /* ── Replace these thresholds after calibration ── */
+    uint32_t total = r + g + b;
+    if (total < 50)            return COL_BLACK;
+    if (total > 900)           return COL_WHITE;
+    if (r > g*2 && r > b*2)   return COL_RED;
+    if (g > r*2 && g > b*2)   return COL_GREEN;
+    if (b > r*2 && b > g*2)   return COL_BLUE;
+    return COL_UNKNOWN;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * SENSOR: NTC-10K temperature
+ *
+ * adc_read_channel() returns voltage directly in Volts (0.0 – 3.3 V).
+ * NOTE: your report mentions an op-amp buffer was needed to eliminate
+ * ADC loading — make sure that circuit is in place.
+ * ═══════════════════════════════════════════════════════════════════ */
+static float read_temperature_c(void) {
+    double v = adc_read_channel(NTC_ANALOG_CH);
+    if (v <= 0.001 || v >= 3.299) return -999.0f;
+    float r_ntc = NTC_FIXED_R * (float)v / (3.3f - (float)v);
+    float inv_T = (1.0f / NTC_T0_K) + logf(r_ntc / NTC_R0) / NTC_BETA;
+    return (1.0f / inv_T) - 273.15f;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * MQTT PUBLISH
+ *
+ * uart_send() sends ONE BYTE at a time.
+ * Packet: [4-byte LE length][payload bytes]
+ * ═══════════════════════════════════════════════════════════════════ */
+static const char *color_name(SampleColor c) {
+    switch (c) {
+        case COL_RED:   return "red";
+        case COL_GREEN: return "green";
+        case COL_BLUE:  return "blue";
+        case COL_WHITE: return "white";
+        case COL_BLACK: return "black";
+        default:        return "unknown";
+    }
+}
+
+static void mqtt_publish(const char *type, int size_cm,
+                         SampleColor color, float temp) {
+    char payload[128];
+    int n = snprintf(payload, sizeof(payload),
+                     "(%.0f,%.0f,%s,%d,%s,%.1f)",
+                     g_pose.x_mm, g_pose.y_mm,
+                     type, size_cm, color_name(color), temp);
+    if (n <= 0 || n >= (int)sizeof(payload)) return;
+
+    uint32_t len = (uint32_t)n;
+    uart_send(UART0, (uint8_t)( len        & 0xFF));
+    uart_send(UART0, (uint8_t)((len >>  8) & 0xFF));
+    uart_send(UART0, (uint8_t)((len >> 16) & 0xFF));
+    uart_send(UART0, (uint8_t)((len >> 24) & 0xFF));
+    for (int i = 0; i < n; i++) uart_send(UART0, (uint8_t)payload[i]);
+
+    printf("[MQTT TX] %s\n", payload);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * STATE MACHINE
+ * ═══════════════════════════════════════════════════════════════════ */
+static void handle_explore(void) {
+    if (cliff_detected()) { g_state = STATE_AVOID_CLIFF;    return; }
+    ObjectType obj = detect_object();
+    if (obj == OBJ_OBSTACLE) { g_state = STATE_AVOID_OBSTACLE;  return; }
+    if (obj == OBJ_BIG_CUBE || obj == OBJ_SMALL_CUBE) {
+        g_state = STATE_APPROACH_CUBE; return;
+    }
+    move_forward(SCAN_STEPS);
+}
+
+static void handle_approach_cube(void) {
+    if (cliff_detected()) { g_state = STATE_AVOID_CLIFF; return; }
+    if (front_distance_bot() <= CUBE_STOP_MM) {
+        g_state = STATE_MEASURE_CUBE; return;
+    }
+    move_forward(100);
+    if (detect_object() == OBJ_NONE) g_state = STATE_EXPLORE;
+}
+
+/* forward-declare so handle_approach_cube can call it */
+static int front_distance_bot(void) { return vl53_read_mm(VL53_ADDR_BOT); }
+
+static void handle_measure_cube(void) {
+    ObjectType  obj   = detect_object();
+    int         size  = (obj == OBJ_BIG_CUBE) ? 6 : 3;
+    SampleColor color = read_color();
+    float       temp  = read_temperature_c();
+
+    mqtt_publish("cube", size, color, temp);
+    printf("[INFO] Cube: %dcm %s %.1f°C @ (%.0f,%.0f)\n",
+           size, color_name(color), temp, g_pose.x_mm, g_pose.y_mm);
+
+    move_backward(BACKUP_STEPS);
+    turn_right_90();
+    move_forward(SCAN_STEPS * 2);
+    turn_left_90();
+    g_state = STATE_EXPLORE;
+}
+
+static void handle_avoid_obstacle(void) {
+    mqtt_publish("obstacle", 0, COL_UNKNOWN, 0.0f);
+    printf("[INFO] Obstacle at (%.0f,%.0f)\n", g_pose.x_mm, g_pose.y_mm);
+    move_backward(BACKUP_STEPS);
+    random_turn();
+    g_state = STATE_EXPLORE;
+}
+
+static void handle_avoid_cliff(void) {
+    printf("[INFO] Cliff at (%.0f,%.0f)\n", g_pose.x_mm, g_pose.y_mm);
+    move_backward(BACKUP_STEPS);
+    turn_180();
+    g_state = STATE_EXPLORE;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * MAIN
+ * ═══════════════════════════════════════════════════════════════════ */
+int main(void) {
+    pynq_init();
+
+    /* Switchbox: route FPGA hardware to physical pins */
+    switchbox_init();
+    switchbox_set_pin(UART_ESP_RX_PIN, SWB_UART0_RX);   /* confirm pin with team */
+    switchbox_set_pin(UART_ESP_TX_PIN, SWB_UART0_TX);
+    switchbox_set_pin(IO_AR_SCL,       SWB_IIC0_SCL);   /* VL53L0X I2C */
+    switchbox_set_pin(IO_AR_SDA,       SWB_IIC0_SDA);
+    switchbox_set_pin(COLOR_OUT_PIN,   SWB_TIMER_IC0);  /* TCS3200 → pulsecounter */
+
+    /* Peripherals */
+    uart_init(UART0);
+    uart_reset_fifos(UART0);
+    iic_init(IIC0);
+    adc_init();
+    pulsecounter_init(PULSECOUNTER0);
+    pulsecounter_set_edge(PULSECOUNTER0, GPIO_LEVEL_HIGH);
+
+    /* GPIO directions */
+    gpio_set_direction(IR_SENSOR_PIN, GPIO_DIR_INPUT);
+    gpio_set_direction(COLOR_S0, GPIO_DIR_OUTPUT);
+    gpio_set_direction(COLOR_S1, GPIO_DIR_OUTPUT);
+    gpio_set_direction(COLOR_S2, GPIO_DIR_OUTPUT);
+    gpio_set_direction(COLOR_S3, GPIO_DIR_OUTPUT);
+
+    /* Distance sensors */
+    vl53_init_all();
+
+    /* Stepper */
+    stepper_init();
+    stepper_enable();
+    stepper_set_speed(MOTOR_SPEED, MOTOR_SPEED);
+
+    srand(42);
+    printf("[BOOT] Robot online.\n");
+
+    while (1) {
+        switch (g_state) {
+            case STATE_EXPLORE:        handle_explore();        break;
+            case STATE_APPROACH_CUBE:  handle_approach_cube();  break;
+            case STATE_MEASURE_CUBE:   handle_measure_cube();   break;
+            case STATE_AVOID_OBSTACLE: handle_avoid_obstacle(); break;
+            case STATE_AVOID_CLIFF:    handle_avoid_cliff();    break;
+        }
+    }
+
+    stepper_disable();
+    pulsecounter_destroy(PULSECOUNTER0);
+    adc_destroy();
+    iic_destroy(IIC0);
+    uart_destroy(UART0);
+    switchbox_destroy();
+    pynq_destroy();
+    return 0;
+}
