@@ -12,9 +12,8 @@
  * 
  */
 
+extern int vl53l0x_triple();
 extern int vl53l0x_example_single();
-extern int vl53l0x_example_dual();
-
 /** This Example program REQUIRES ALL OF:
  * - single.c
  * - dual.c
@@ -36,7 +35,7 @@ int main(void) {
 	**/	
 
 	/** Connect one sensor to the IIC bus and enjoy! **/
-	vl53l0x_example_single();
+	vl53l0x_triple();
 
 	/** Connect two sensors to the IIC bus
 	 * ONLY CONNECT ONE TO 5V and GND
