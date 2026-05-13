@@ -87,4 +87,5 @@ extern int tofGetModel(vl53x *sensor, uint8_t *model, uint8_t *revision);
 extern uint32_t tofReadDistance(vl53x *sensor);
 
 
+
 #endif // _TOFLIB_H

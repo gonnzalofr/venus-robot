@@ -3,96 +3,55 @@
 #include "vl53l0x.h"
 #include <stdio.h>
 
+ /*
+ *  TU/e 5EID0::LIBPYNQ Driver for VL53L0X TOF Sensor
+ *  Example Code 
+ * 
+ *  Original: Larry Bank
+ *  Adapted for PYNQ: Walthzer
+ * 
+ */
 
-int vl53l0x_example_dual(void) {
-	int i;
-	//Setup Sensor A
-	printf("Initialising Sensor A:\n");
+int vl53l0x_triple(void) {
+    uint8_t addrA = 0x68;
+    uint8_t addrB = 0x69;
+    uint8_t addrC = 0x6A;
 
-	//Change the Address of the VL53L0X
-	uint8_t addrA = 0x69;
-	i = tofSetAddress(IIC0, 0x29, addrA);
-	printf("---Address Change: ");
-	if(i != 0)
-	{
-		printf("Fail\n");
-		return 1;
-	}
-	printf("Succes\n");
+    gpio_set_level(AR0, GPIO_LEVEL_LOW); 
+    gpio_set_level(AR1, GPIO_LEVEL_LOW); 
+    sleep_msec(10);
+
+    tofsetaddress(IIC0, 0x29, addrA);
+    gpio_set_level(AR0, GPIO_LEVEL_HIGH);  
+    sleep_msec(10);
+
+    tofSetAddress(IIC0, 0x29, addrB);       
+    gpio_set_level(AR1, GPIO_LEVEL_HIGH); 
+    sleep_msec(10);
+
+    tofSetAddress(IIC0, 0x29, addrC);      
+
 	
-	i = tofPing(IIC0, addrA);
-	printf("---Sensor Ping: ");
-	if(i != 0)
-	{
-		printf("Fail\n");
-		return 1;
-	}
-	printf("Succes\n");
-
-	//Create a sensor struct
 	vl53x sensorA;
+    vl53x sensorB;
+    vl53x sensorC;
 
-	//Initialize the sensor
-
-	i = tofInit(&sensorA, IIC0, addrA, 0);
-	if (i != 0)
-	{
-		printf("---Init: Fail\n");
-		return 1;
-	}
-
-	uint8_t model, revision;
-
-	tofGetModel(&sensorA, &model, &revision);
-	printf("---Model ID - %d\n", model);
-	printf("---Revision ID - %d\n", revision);
-	printf("---Init: Succes\n");
-	fflush(NULL);
-
-	printf("\n\nNow Power Sensor B!!\nPress \"Enter\" to continue...\n");
-	getchar();
-
-	//Setup Sensor B
-	printf("Initialising Sensor B:\n");
-
-	//Use the base addr of 0x29 for sensor B
-	//It no longer conflicts with sensor A.
-	uint8_t addrB = 0x29;	
-	i = tofPing(IIC0, addrB);
-	printf("---Sensor Ping: ");
-	if(i != 0)
-	{
-		printf("Fail\n");
-		return 1;
-	}
-	printf("Succes\n");
-
-	//Create a sensor struct
-	vl53x sensorB;
-
-	//Initialize the sensor
-
-	i = tofInit(&sensorB, IIC0, addrB, 0);
-	if (i != 0)
-	{
-		printf("---Init: Fail\n");
-		return 1;
-	}
-
-	tofGetModel(&sensorB, &model, &revision);
-	printf("---Model ID - %d\n", model);
-	printf("---Revision ID - %d\n", revision);
-	printf("---Init: Succes\n");
-	fflush(NULL); //Get some output even if the distance readings hang
-	printf("\n");
-
-	uint32_t iDistance;
+	tofInit(&sensorA, IIC0, addrA, 0);
+    tofInit(&sensorB, IIC0, addrB, 0);
+    tofInit(&sensorC, IIC0, addrC, 0);
+	
+	uint32_t iDistance1;
+    uint32_t iDistance2;
+    uint32_t iDistance3;
+    
 	for (i=0; i<1200; i++)
 	{
-		iDistance = tofReadDistance(&sensorA);
-		printf("A => %dmm -- ", iDistance);
-		iDistance = tofReadDistance(&sensorB);
-		printf("B => %dmm\n", iDistance);
+		iDistance1 = tofReadDistance(&sensorA);
+		printf("A => %dmm -- ", iDistance1);
+		iDistance2 = tofReadDistance(&sensorB);
+		printf("B => %dmm\n", iDistance2);
+        iDistance3 = tofReadDistance(&sensorC);
+		printf("C => %dmm\n", iDistance3);
 		sleep_msec(100);
 	}
 
