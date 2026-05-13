@@ -23,11 +23,12 @@ extern int vl53l0x_example_single();
 
 int main(void) {
   	pynq_init();
-
+	printf("Test1\n");
 	//Setting up the buttons & LEDs
 	//Init the IIC pins
 	switchbox_set_pin(IO_AR_SCL, SWB_IIC0_SCL);
 	switchbox_set_pin(IO_AR_SDA, SWB_IIC0_SDA);
+
 	iic_init(IIC0);
 
 	/**Test Scripts: Select ONE!
@@ -36,8 +37,8 @@ int main(void) {
 	**/	
 
 	/** Connect one sensor to the IIC bus and enjoy! **/
-	vl53l0x_triple();
-
+	//vl53l0x_triple();
+	vl53l0x_example_single();
 	/** Connect two sensors to the IIC bus
 	 * ONLY CONNECT ONE TO 5V and GND
 	 * --If the second sensor is connected to either 5v or GND
@@ -77,6 +78,14 @@ int vl53l0x_triple(void) {
 	printf("Succes\n");
     gpio_set_level(AR0, GPIO_LEVEL_HIGH);  
     sleep_msec(100);
+
+	gpio_set_level(AR0, GPIO_LEVEL_HIGH);
+sleep_msec(100);
+
+	int p = tofPing(IIC0, 0x29);
+	printf("Post-AR0-HIGH ping 0x29: %s\n", p == 0 ? "OK" : "FAIL");
+
+	i = tofSetAddress(IIC0, 0x29, addrB);
 
     i = tofSetAddress(IIC0, 0x29, addrB);  
     printf("---Address Change: ");
