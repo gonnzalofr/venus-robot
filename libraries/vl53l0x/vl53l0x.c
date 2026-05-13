@@ -838,4 +838,3 @@ int i;
 	return 0;
 
 } /* tofGetModel() */
-
