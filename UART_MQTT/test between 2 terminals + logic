@@ -28,7 +28,6 @@ def show_map():
     size = 20
     grid = np.zeros((size, size))
 
-    # terrain
     for (x, y), val in map_grid.items():
         if 0 <= x < size and 0 <= y < size:
             if val == "free":
@@ -40,13 +39,12 @@ def show_map():
             elif val == "boundary":
                 grid[y][x] = 4
 
-    # robots (draw last)
     for r in robots:
         pos = robots[r]["pos"]
         if pos is not None:
             x, y = pos
             if 0 <= x < size and 0 <= y < size:
-                grid[y][x] = 5  # robot
+                grid[y][x] = 5
 
     plt.clf()
 
@@ -56,7 +54,7 @@ def show_map():
         "red",        # obstacle
         "green",      # rock
         "black",      # boundary
-        "yellow"      # robot (FIXED)
+        "yellow"      # robot
     ])
 
     plt.imshow(grid, cmap=cmap, vmin=0, vmax=5)
@@ -87,7 +85,7 @@ def update_map(pos, value):
 def handle_logic(client_A, client_B):
     global collision_active, update_needed
 
-    # Collision
+    # Collision detection
     if robots["A"]["pos"] and robots["B"]["pos"]:
         ax, ay = robots["A"]["pos"]
         bx, by = robots["B"]["pos"]
@@ -111,7 +109,7 @@ def handle_logic(client_A, client_B):
 
         action_taken = False
 
-        # Boundary
+        # ===== BLACK (boundary or black rock handled on robot side)
         if c == "black":
             print(f"{r}: boundary detected")
             update_map(pos, "boundary")
@@ -123,7 +121,7 @@ def handle_logic(client_A, client_B):
             robots[r]["color"] = None
             action_taken = True
 
-        # Distance obstacle
+        # ===== DISTANCE OBSTACLE
         elif d is not None and d < 10:
             print(f"{r}: obstacle detected")
             update_map(pos, "obstacle")
@@ -133,9 +131,9 @@ def handle_logic(client_A, client_B):
             robots[r]["distance"] = None
             action_taken = True
 
-        # Rock
-        elif c == "green":
-            print(f"{r}: rock detected")
+        # ===== ROCK (ALL COLORS EXCEPT BLACK)
+        elif c not in [None, "black"]:
+            print(f"{r}: rock detected ({c})")
             update_map(pos, "rock")
 
             send(client_A, client_B, r, "STOP")
@@ -146,19 +144,8 @@ def handle_logic(client_A, client_B):
             robots[r]["color"] = None
             action_taken = True
 
-        # Colored obstacles
-        elif c in ["red", "blue"]:
-            print(f"{r}: obstacle ({c})")
-            update_map(pos, "obstacle")
-
-            send(client_A, client_B, r, "STOP")
-            send(client_A, client_B, r, "TURN;90")
-
-            robots[r]["color"] = None
-            action_taken = True
-
-        # Free space
-        elif pos is not None:
+        # ===== FREE SPACE
+        elif pos is not None and map_grid.get(pos) is None:
             update_map(pos, "free")
 
         if not action_taken:
@@ -194,7 +181,7 @@ def on_message(client, userdata, msg):
                 key, value = p.split(":")
 
                 if key == "temp":
-                    robots[robot]["temp"] = int(value)
+                    robots[robot]["temp"] = float(value)
 
                 elif key == "color":
                     robots[robot]["color"] = value
