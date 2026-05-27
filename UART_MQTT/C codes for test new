@@ -1,0 +1,136 @@
+#include <libpynq.h>
+#include <time.h>
+#include "mqtt.h"
+
+int main(void) {
+    pynq_init();
+    init_mqtt();
+    
+    srand(time(NULL));
+
+   
+    const char *colors[] = {"Red", "Blue", "Green", "Yellow"};
+    int sizes[] = {10, 6, 30, 100};
+    float temps[] = {25.25, 35.02, 300.60, 59.40};
+    
+   int x, y;
+   int size;
+   float temp;
+   char color[32] = "Unknown"; 
+
+    while(1) {
+        int i = rand() % 4;
+        
+        
+        send_mqtt(10, 20, colors[i], sizes[i], temps[i]);
+        
+        sleep_msec(5000);
+        
+       recv_mqtt(&x, &y, &size, &temp, color);
+       
+       
+       printf("%i, %i, %i, %.2f, %s  \n", x, y ,size, temp, color);
+       
+       
+    }
+
+    pynq_destroy();
+    return 0;
+}  
+
+\\\\ 2one
+#include "mqtt.h"
+#include <libpynq.h>
+
+void init_mqtt(){
+    switchbox_set_pin(IO_AR1, SWB_UART0_TX); 
+    switchbox_set_pin(IO_AR0, SWB_UART0_RX);
+    uart_init(UART0);
+    switchbox_init();
+}
+
+void send_mqtt(int x, int y, const char* color, int size, float temp) {
+    char json_payload[128];
+   
+    sprintf(json_payload, "{\"type\":\"ROCK\",\"x\":\"%i\",\"y\":\"%i\",\"color\":\"%s\",\"size\":%d,\"temp\":%.2f}", x, y, color, size, temp);
+    uint32_t len = (uint32_t)strlen(json_payload);
+
+    
+    uart_send(UART0, (len >> 0) & 0xFF);
+    uart_send(UART0, (len >> 8) & 0xFF);
+    uart_send(UART0, (len >> 16) & 0xFF);
+    uart_send(UART0, (len >> 24) & 0xFF);
+
+   
+    for (uint32_t i = 0; i < len; i++) {
+        uart_send(UART0, json_payload[i]);
+    }
+    
+    printf("Sent (%u bytes): %s\n", len, json_payload);
+    
+}
+
+
+
+#include <string.h>
+#include <stdlib.h>
+
+
+void recv_mqtt(int* xz, int* yz, int* sizez, float* tempz, char color_buf[]) {
+    
+  
+    if (uart_has_data(UART0)) {
+        
+       
+        uint32_t len = 0;
+        len |= (uint32_t)uart_recv(UART0) << 0;
+        len |= (uint32_t)uart_recv(UART0) << 8;
+        len |= (uint32_t)uart_recv(UART0) << 16;
+        len |= (uint32_t)uart_recv(UART0) << 24;
+
+        if (len > 0 && len < 1024) {
+            char json_buffer[len + 1];
+            for (uint32_t i = 0; i < len; i++) {
+                json_buffer[i] = uart_recv(UART0);
+            }
+            json_buffer[len] = '\0';
+
+            int x = 0, y = 0, size = 0;
+            float temp = 0.0;
+          
+            char *p;
+
+           
+            if ((p = strstr(json_buffer, "\"x\":\"")))      x = atoi(p + 5);
+            if ((p = strstr(json_buffer, "\"y\":\"")))      y = atoi(p + 5);
+            if ((p = strstr(json_buffer, "\"size\":")))    size = atoi(p + 7);
+            if ((p = strstr(json_buffer, "\"temp\":")))    temp = atof(p + 7);
+            
+            if ((p = strstr(json_buffer, "\"color\":\""))) {
+                char *start = p + 9;
+                char *end = strchr(start, '\"');
+                if (end) {
+                    size_t color_len = end - start;
+                    if (color_len > 31) color_len = 31; 
+                    strncpy(color_buf, start, color_len);
+                    color_buf[color_len] = '\0';
+                }
+            }
+
+            // 3. Print Results
+            printf("\n--- PARTNER ROBOT DATA ---\n");
+            printf("X Coordinate: %d\n", x);
+            printf("Y Coordinate: %d\n", y);
+            printf("Rock Color:   %s\n", color_buf);
+            printf("Rock Size:    %d cm\n", size);
+            printf("Temperature:  %.2f C\n", temp);
+            printf("--------------------------\n");
+            
+            *xz = x;
+            *yz = y;
+            *sizez = size;
+            *tempz = temp;
+            
+        }
+    }
+}

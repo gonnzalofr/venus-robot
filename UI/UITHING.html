@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mars Rover Mission Control // Anti-Stuck & Respawn</title>
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --panel-bg: #1f2833;
+            --text-main: #c5c6c7;
+            --accent-cyan: #66fcf1;
+            --accent-dark-cyan: #45a29e;
+            --color-unknown: #0b0c10;
+            --color-free: #1f2833;
+            --color-occupied: #ff2e63;
+            --color-rock: #fce38a;
+            --font-mono: 'Courier New', Courier, monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* --- Layout --- */
+        #app-container { display: flex; width: 100%; height: 100%; }
+
+        /* --- Left: Map Section --- */
+        .map-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            border-right: 2px solid var(--accent-dark-cyan);
+            position: relative;
+        }
+
+        /* Top Area: Pilot Cam & HUD */
+        .top-hud-area {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 0 10px;
+        }
+
+        /* Pilot Cam */
+        .pilot-cam-container {
+            width: 200px; height: 160px;
+            background: #000; border: 2px solid var(--accent-dark-cyan);
+            border-radius: 8px; overflow: hidden;
+            box-shadow: 0 0 20px rgba(102, 252, 241, 0.2);
+            flex-shrink: 0;
+        }
+        .pilot-cam-header {
+            background: var(--accent-dark-cyan); color: #000;
+            font-size: 10px; font-weight: bold; padding: 4px 8px;
+            display: flex; justify-content: space-between;
+        }
+        .pilot-cam-status { width: 8px; height: 8px; background: #0f0; border-radius: 50%; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.3; } }
+
+        /* Status HUD */
+        .map-overlay-hud {
+            background: rgba(11, 12, 16, 0.9);
+            padding: 12px; border: 1px solid var(--accent-dark-cyan);
+            font-family: var(--font-mono); font-size: 12px;
+            pointer-events: none; backdrop-filter: blur(4px);
+            min-width: 180px;
+            border-radius: 4px;
+        }
+        .hud-row { margin-bottom: 5px; display: flex; justify-content: space-between; }
+        .hud-val { color: var(--accent-cyan); font-weight: bold; }
+        .state-val { color: #f9d71c; font-weight: bold; }
+        .alert-msg { color: #ff2e63; font-weight: bold; margin-top: 5px; display: none; text-align: center; }
+
+        /* Main Map */
+        .map-wrapper {
+            position: relative;
+            box-shadow: 0 0 25px rgba(102, 252, 241, 0.15);
+            border: 1px solid var(--accent-dark-cyan);
+        }
+
+        canvas { display: block; background-color: var(--color-unknown); }
+
+        /* --- Right: Sidebar --- */
+        .sidebar {
+            width: 360px; background-color: var(--panel-bg);
+            display: flex; flex-direction: column; padding: 20px; overflow-y: auto;
+            border-left: 1px solid #333;
+        }
+
+        h2 {
+            font-family: var(--font-mono); color: var(--accent-cyan);
+            margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px;
+            border-bottom: 2px solid var(--accent-dark-cyan); padding-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .control-panel {
+            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;
+            margin-bottom: 20px; border: 1px solid #444;
+        }
+
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .btn-group.full { grid-template-columns: 1fr; }
+        .speed-group { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 10px; }
+
+        button {
+            padding: 8px; cursor: pointer; background: var(--accent-dark-cyan);
+            color: #fff; border: none; border-radius: 4px; font-weight: bold;
+            text-transform: uppercase; font-size: 10px; transition: all 0.1s;
+        }
+        button:active { transform: scale(0.98); }
+        button:hover { background: var(--accent-cyan); color: #000; }
+        button.stop-btn { background: var(--color-occupied); }
+        button.stop-btn:hover { background: #ff5c8d; }
+        button:disabled { background: #555; cursor: not-allowed; color: #888; }
+        button.active-speed { background: var(--accent-cyan); color: #000; border: 1px solid #fff; }
+
+        .manual-controls {
+            margin-top: 15px; padding-top: 15px; border-top: 1px dashed #555;
+        }
+        .d-pad {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px;
+            width: 150px; margin: 0 auto;
+        }
+        .d-pad button { height: 40px; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+        
+        .mode-toggle {
+            display: flex; justify-content: center; margin-bottom: 10px; gap: 10px;
+        }
+        .mode-btn { background: #333; border: 1px solid #555; color: #aaa; }
+        .mode-btn.active { background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan); }
+
+        .rock-log-container { flex: 1; overflow-y: auto; margin-top: 20px; }
+        .rock-card {
+            background: #252e38; border-left: 4px solid var(--color-rock);
+            margin-bottom: 12px; padding: 12px; border-radius: 0 4px 4px 0;
+            animation: slideIn 0.4s ease-out; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        
+        .rock-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-family: var(--font-mono); color: var(--color-rock); font-weight: bold; font-size: 13px; }
+        .rock-details { font-size: 12px; color: #ccc; line-height: 1.6; }
+        .color-preview { width: 12px; height: 12px; display: inline-block; border-radius: 50%; margin-right: 5px; border: 1px solid #fff; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+
+        .status-text { font-size: 11px; color: #aaa; margin-top: 10px; text-align: center; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        <!-- Left: Visualization -->
+        <div class="map-section">
+            
+            <!-- Top HUD Area -->
+            <div class="top-hud-area">
+                
+                <!-- State HUD -->
+                <div class="map-overlay-hud">
+                    <div class="hud-row">STATE: <span class="state-val" id="ui-state">INIT</span></div>
+                    <div class="hud-row">POS: <span class="hud-val" id="ui-pos">0,0</span></div>
+                    <div class="hud-row">HDG: <span class="hud-val" id="ui-head">0°</span></div>
+                    <div class="hud-row">TARGET: <span class="hud-val" id="ui-target">--</span></div>
+                    <div class="hud-row">TOF: <span class="hud-val" id="ui-sensor">--</span></div>
+                    <div class="alert-msg" id="ui-alert">ANALYZING ROCK...</div>
+                </div>
+
+                <!-- Pilot Cam -->
+                <div class="pilot-cam-container">
+                    <div class="pilot-cam-header">
+                        <span>PILOT CAM</span>
+                        <div class="pilot-cam-status"></div>
+                    </div>
+                    <canvas id="pilotCanvas" width="200" height="160"></canvas>
+                </div>
+            </div>
+
+            <!-- Map -->
+            <div class="map-wrapper">
+                <canvas id="slamCanvas" width="600" height="600"></canvas>
+            </div>
+        </div>
+
+        <!-- Right: Controls -->
+        <div class="sidebar">
+            <h2>Mission Control</h2>
+            
+            <div class="control-panel">
+                <div class="btn-group">
+                    <button id="btn-start" onclick="mission.toggleRun()">START / RESUME</button>
+                    <button id="btn-pause" onclick="mission.pause()">PAUSE</button>
+                </div>
+                <div class="btn-group full">
+                    <button class="stop-btn" onclick="mission.reset()">RESET SYSTEM</button>
+                </div>
+
+                <!-- Speed Control -->
+                <div style="margin-top:15px; margin-bottom:10px;">
+                    <label style="color:#888; font-size:10px; display:block; margin-bottom:5px;">SIMULATION SPEED</label>
+                    <div class="speed-group">
+                        <button onclick="mission.setSpeed(0.1)">0.1x</button>
+                        <button onclick="mission.setSpeed(0.5)">0.5x</button>
+                        <button onclick="mission.setSpeed(1.0)" class="active-speed" id="btn-speed-1">1x</button>
+                        <button onclick="mission.setSpeed(2.0)">2x</button>
+                        <button onclick="mission.setSpeed(5.0)">5x</button>
+                    </div>
+                </div>
+
+                <div class="mode-toggle">
+                    <button id="mode-auto" class="mode-btn active" onclick="mission.setMode('AUTO')">AUTO PILOT</button>
+                    <button id="mode-manual" class="mode-btn" onclick="mission.setMode('MANUAL')">MANUAL</button>
+                </div>
+
+                <div class="manual-controls" id="manual-panel" style="display:none;">
+                    <div style="text-align: center; color: #888; font-size: 11px; margin-bottom: 5px;">DRIVE CONTROLS</div>
+                    <div class="d-pad">
+                        <div></div>
+                        <button onmousedown="mission.setManualKey('up', true)" onmouseup="mission.setManualKey('up', false)" ontouchstart="mission.setManualKey('up', true)" ontouchend="mission.setManualKey('up', false)">▲</button>
+                        <div></div>
+                        <button onmousedown="mission.setManualKey('left', true)" onmouseup="mission.setManualKey('left', false)" ontouchstart="mission.setManualKey('left', true)" ontouchend="mission.setManualKey('left', false)">◀</button>
+                        <button onmousedown="mission.setManualKey('down', true)" onmouseup="mission.setManualKey('down', false)" ontouchstart="mission.setManualKey('down', true)" ontouchend="mission.setManualKey('down', false)">▼</button>
+                        <button onmousedown="mission.setManualKey('right', true)" onmouseup="mission.setManualKey('right', false)" ontouchstart="mission.setManualKey('right', true)" ontouchend="mission.setManualKey('right', false)">▶</button>
+                    </div>
+                </div>
+
+                <div class="status-text" id="sim-status">System Ready.</div>
+            </div>
+
+            <div class="rock-log-container">
+                <h3 style="font-size: 14px; color: #aaa; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;">SAMPLE DATABASE</h3>
+                <div id="rock-list">
+                    <div style="text-align:center; padding: 20px; color: #444; font-size: 12px;">No samples collected.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+/**
+ * Final Build: Rock Respawn + Aggressive Anti-Stuck
+ */
+
+// --- GLOBAL CONSTANTS ---
+const GRID_W = 100;
+const GRID_H = 100;
+const CANVAS_SIZE = 600;
+const PIXEL_SCALE = CANVAS_SIZE / GRID_W;
+
+// Navigation & Safety
+const ROBOT_SPEED = 0.2;       
+const TURN_SPEED = 4.0;
+const OBSTACLE_STOP_DIST = 3.0; 
+const ROCK_APPROACH_DIST = 0.8; 
+const EDGE_BUFFER = 5;          
+
+const C_UNKNOWN = 0;
+const C_FREE = 1;
+const C_OCCUPIED = 2;
+
+class MissionControl {
+    constructor() {
+        this.canvas = document.getElementById('slamCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.pilotCanvas = document.getElementById('pilotCanvas');
+        this.pilotCtx = this.pilotCanvas.getContext('2d');
+        
+        this.isRunning = false;
+        this.mode = 'AUTO'; 
+        this.simulationSpeed = 1.0; 
+        this.frameCounter = 0; 
+        this.animationId = null;
+
+        this.robot = {
+            x: 50.0, y: 50.0,
+            heading: 0.0,
+            state: 'STATE_INIT',
+            target: { x: -1, y: -1 },
+            detectedRock: null,
+            ir_left_alert: false,
+            ir_right_alert: false,
+            lastDistToTarget: 9999,
+            stuckCounter: 0
+        };
+
+        this.manualInput = { up: false, down: false, left: false, right: false };
+        this.occupancyGrid = []; 
+        this.virtualMap = []; 
+        this.sensors = { tof_low: 9999 };
+
+        this.initDataStructures();
+        this.seedVirtualEnvironment(); // Generate world on load
+        this.draw();
+        this.drawRobotView();
+    }
+
+    initDataStructures() {
+        this.occupancyGrid = Array(GRID_W).fill().map(() => Array(GRID_H).fill(C_UNKNOWN));
+        this.virtualMap = Array(GRID_W).fill().map(() => Array(GRID_H).fill(C_FREE));
+        
+        this.robot.x = 50.0; 
+        this.robot.y = 50.0; 
+        this.robot.heading = 0.0;
+        this.robot.state = 'STATE_INIT';
+        this.robot.target = { x: -1, y: -1 };
+        this.robot.stuckCounter = 0;
+        this.robot.lastDistToTarget = 9999;
+
+        const safeRadius = 6;
+        for(let x = 50-safeRadius; x <= 50+safeRadius; x++){
+            for(let y = 50-safeRadius; y <= 50+safeRadius; y++){
+                if(x>=0 && x<GRID_W && y>=0 && y<GRID_H){
+                    this.occupancyGrid[x][y] = C_FREE;
+                }
+            }
+        }
+
+        document.getElementById('rock-list').innerHTML = '<div style="text-align:center; padding: 20px; color: #444; font-size: 12px;">No samples collected.</div>';
+        document.getElementById('sim-status').innerText = "System Ready. Select Mode and Start.";
+        document.getElementById('ui-alert').style.display = 'none';
+        this.updateUI();
+    }
+
+    toggleRun() {
+        if (this.isRunning) return; 
+        
+        if (this.robot.state === 'STATE_INIT') {
+            this.robot.state = 'STATE_COMPUTE_FRONTIER';
+        }
+
+        this.isRunning = true;
+        document.getElementById('sim-status').innerText = "Running...";
+        document.getElementById('sim-status').style.color = "#66fcf1";
+        document.getElementById('btn-start').disabled = true;
+        document.getElementById('btn-pause').disabled = false;
+        this.loop();
+    }
+
+    pause() {
+        this.isRunning = false;
+        cancelAnimationFrame(this.animationId);
+        document.getElementById('sim-status').innerText = "Paused";
+        document.getElementById('sim-status').style.color = "#fce38a";
+        document.getElementById('btn-start').disabled = false;
+        document.getElementById('btn-pause').disabled = true;
+    }
+
+    reset() {
+        this.pause();
+        this.initDataStructures(); // Resets arrays
+        this.seedVirtualEnvironment(); // <--- FIX: Respawn rocks immediately
+        this.setSpeed(1.0); 
+        this.mode = 'AUTO';
+        this.updateModeUI();
+        this.draw();
+        this.drawRobotView();
+    }
+
+    setSpeed(val) {
+        this.simulationSpeed = val;
+        document.querySelectorAll('.speed-group button').forEach(btn => {
+            btn.classList.remove('active-speed');
+            if (btn.innerText === val + 'x' || (val === 1.0 && btn.innerText === '1x')) {
+                btn.classList.add('active-speed');
+            }
+        });
+    }
+
+    setMode(newMode) {
+        this.mode = newMode;
+        this.updateModeUI();
+    }
+
+    updateModeUI() {
+        document.getElementById('mode-auto').classList.toggle('active', this.mode === 'AUTO');
+        document.getElementById('mode-manual').classList.toggle('active', this.mode === 'MANUAL');
+        document.getElementById('manual-panel').style.display = (this.mode === 'MANUAL') ? 'block' : 'none';
+        if (this.mode === 'MANUAL') this.robot.state = 'STATE_MANUAL_DRIVE';
+        else this.robot.state = 'STATE_COMPUTE_FRONTIER';
+    }
+
+    setManualKey(key, isPressed) { this.manualInput[key] = isPressed; }
+
+    // --- Logic ---
+
+    seedVirtualEnvironment() {
+        this.virtualMap = Array(GRID_W).fill().map(() => Array(GRID_H).fill(C_FREE));
+        this.virtualRocks = [];
+
+        // Obstacles
+        for (let i = 0; i < 50; i++) {
+            let cx = Math.floor(Math.random() * GRID_W);
+            let cy = Math.floor(Math.random() * GRID_H);
+            let size = 2 + Math.floor(Math.random() * 3);
+            
+            if (Math.abs(cx - 50) < 10 && Math.abs(cy - 50) < 10) continue;
+            if (cx < EDGE_BUFFER || cx > GRID_W - EDGE_BUFFER || cy < EDGE_BUFFER || cy > GRID_H - EDGE_BUFFER) continue;
+
+            for (let x = cx; x < cx+size && x < GRID_W; x++) {
+                for (let y = cy; y < cy+size && y < GRID_H; y++) {
+                    this.virtualMap[x][y] = C_OCCUPIED;
+                }
+            }
+        }
+
+        // Rocks
+        for(let i=0; i<30; i++) {
+            let rx = Math.floor(Math.random() * GRID_W);
+            let ry = Math.floor(Math.random() * GRID_H);
+            
+            if (Math.abs(rx - 50) < 10 && Math.abs(ry - 50) < 10) continue;
+            if (rx < EDGE_BUFFER || rx > GRID_W - EDGE_BUFFER || ry < EDGE_BUFFER || ry > GRID_H - EDGE_BUFFER) continue;
+
+            this.virtualMap[rx][ry] = C_OCCUPIED; 
+            this.virtualRocks.push({ x: rx, y: ry, id: i });
+        }
+    }
+
+    loop() {
+        if (!this.isRunning) return;
+
+        if (this.simulationSpeed >= 1) {
+            for(let i=0; i<this.simulationSpeed; i++) {
+                this.updateLogicStep();
+            }
+        } else {
+            this.frameCounter++;
+            if (this.frameCounter >= (1/this.simulationSpeed)) {
+                this.updateLogicStep();
+                this.frameCounter = 0;
+            }
+        }
+
+        this.draw();
+        this.drawRobotView();
+        this.updateUI();
+
+        this.animationId = requestAnimationFrame(() => this.loop());
+    }
+
+    updateLogicStep() {
+        this.simulateSensors(); 
+        this.updateOccupancyGrid(); 
+
+        // Hard Boundary Clamp
+        this.robot.x = Math.max(0, Math.min(GRID_W, this.robot.x));
+        this.robot.y = Math.max(0, Math.min(GRID_H, this.robot.y));
+
+        if (this.mode === 'AUTO') this.runStateMachine();
+        else this.runManualLogic();
+    }
+
+    runManualLogic() {
+        const r = this.robot;
+        r.state = 'STATE_MANUAL_DRIVE';
+        
+        let moveStep = 0;
+        if (this.manualInput.up) moveStep = ROBOT_SPEED;
+        if (this.manualInput.down) moveStep = -ROBOT_SPEED * 0.5;
+
+        if (moveStep !== 0) {
+            const rad = r.heading * Math.PI / 180;
+            let nextX = r.x + Math.cos(rad) * moveStep;
+            let nextY = r.y + Math.sin(rad) * moveStep;
+
+            const gx = Math.floor(nextX);
+            const gy = Math.floor(nextY);
+            
+            if (gx >= 0 && gx < GRID_W && gy >= 0 && gy < GRID_H) {
+                if (this.occupancyGrid[gx][gy] !== C_OCCUPIED) {
+                    r.x = nextX; r.y = nextY;
+                }
+            }
+            r.target = { x: -1, y: -1 };
+        }
+
+        if (this.manualInput.left) r.heading -= TURN_SPEED;
+        if (this.manualInput.right) r.heading += TURN_SPEED;
+        
+        if (this.sensors.tof_low < ROCK_APPROACH_DIST && this.sensors.tof_low > 0.1) {
+             const hit = this.getRaycastHit(this.sensors.tof_low);
+             if (hit.isRock) {
+                 r.detectedRock = { type: 'MANUAL_SAMPLE', pos: hit.pos };
+                 this.analyzeRockSample();
+                 const rad = r.heading * Math.PI / 180;
+                 r.x -= Math.cos(rad) * 2.0;
+                 r.y -= Math.sin(rad) * 2.0;
+             }
+        }
+    }
+
+    runStateMachine() {
+        const r = this.robot;
+
+        switch (r.state) {
+            case 'STATE_COMPUTE_FRONTIER':
+                r.target = this.evaluateAndSelectFrontier();
+                if (r.target.x === -1) {
+                    r.target = { 
+                        x: Math.floor(Math.random() * (GRID_W-10)) + 5, 
+                        y: Math.floor(Math.random() * (GRID_H-10)) + 5 
+                    };
+                }
+                r.stuckCounter = 0; 
+                r.lastDistToTarget = 9999;
+                r.state = 'STATE_NAVIGATE_TO_TARGET';
+                break;
+
+            case 'STATE_NAVIGATE_TO_TARGET':
+                const currentDist = Math.hypot(r.x - r.target.x, r.y - r.target.y);
+                
+                // If we are very close, consider it reached
+                if (currentDist < 1.0) {
+                    r.state = 'STATE_COMPUTE_FRONTIER';
+                    break;
+                }
+
+                // Stuck Detection Logic
+                if (currentDist >= r.lastDistToTarget - 0.1) {
+                    r.stuckCounter++;
+                } else {
+                    r.stuckCounter = 0;
+                }
+                r.lastDistToTarget = currentDist;
+
+                // FIX: Lowered threshold to 60, and added aggressive recovery
+                if (r.stuckCounter > 60) {
+                    // Aggressive Turn (135 to 180 degrees)
+                    const turnAmt = 135 + (Math.random() * 45);
+                    r.heading += (Math.random() > 0.5 ? turnAmt : -turnAmt);
+                    
+                    // Back up to clear the obstacle
+                    const rad = r.heading * Math.PI / 180;
+                    r.x += Math.cos(rad) * -2.0;
+                    r.y += Math.sin(rad) * -2.0;
+
+                    r.state = 'STATE_COMPUTE_FRONTIER';
+                    break;
+                }
+
+                // Boundary Check
+                if (r.x < EDGE_BUFFER || r.x > GRID_W - EDGE_BUFFER || r.y < EDGE_BUFFER || r.y > GRID_H - EDGE_BUFFER) {
+                    r.state = 'STATE_AVOID_BOUNDARY';
+                    break;
+                }
+
+                if (this.sensors.tof_low < OBSTACLE_STOP_DIST) {
+                    const hitInfo = this.getRaycastHit(this.sensors.tof_low);
+                    if (hitInfo.isRock) {
+                        r.detectedRock = { 
+                            type: (Math.random() > 0.5) ? 'ROCK_CUBE_3X3' : 'ROCK_CUBE_6X6',
+                            pos: hitInfo.pos
+                        };
+                        r.state = 'STATE_APPROACH_ROCK';
+                    } else {
+                        r.state = 'STATE_AVOID_OBSTACLE';
+                    }
+                } else {
+                    this.navigateStep();
+                }
+                break;
+
+            case 'STATE_AVOID_BOUNDARY':
+            case 'STATE_AVOID_OBSTACLE':
+                // Turn away
+                this.robot.heading += (Math.random() > 0.5 ? 45 : -45); 
+                this.robot.x += Math.cos(this.robot.heading * Math.PI/180) * 0.5;
+                this.robot.y += Math.sin(this.robot.heading * Math.PI/180) * 0.5;
+                r.state = 'STATE_COMPUTE_FRONTIER'; 
+                break;
+
+            case 'STATE_APPROACH_ROCK':
+                if (this.sensors.tof_low > ROCK_APPROACH_DIST) {
+                    this.navigateStep(ROBOT_SPEED * 0.5); 
+                } else {
+                    r.state = 'STATE_ANALYZE_ROCK';
+                }
+                break;
+
+            case 'STATE_ANALYZE_ROCK':
+                this.analyzeRockSample();
+                this.robot.heading += 90;
+                this.robot.x += Math.cos(this.robot.heading * Math.PI/180) * 2.0;
+                this.robot.y += Math.sin(this.robot.heading * Math.PI/180) * 2.0;
+                r.state = 'STATE_COMPUTE_FRONTIER';
+                break;
+        }
+    }
+
+    simulateSensors() {
+        const rad = this.robot.heading * Math.PI / 180;
+        let dist = 25.0; 
+
+        for (let i = 0; i < dist * 10; i++) {
+            const checkDist = i / 10.0;
+            const cx = Math.floor(this.robot.x + Math.cos(rad) * checkDist);
+            const cy = Math.floor(this.robot.y + Math.sin(rad) * checkDist);
+
+            if (cx < 0 || cx >= GRID_W || cy < 0 || cy >= GRID_H) {
+                dist = checkDist; break;
+            }
+            if (this.virtualMap[cx][cy] === C_OCCUPIED) {
+                dist = checkDist; break;
+            }
+        }
+        this.sensors.tof_low = dist;
+    }
+
+    getRaycastHit(dist) {
+        const rad = this.robot.heading * Math.PI / 180;
+        const cx = Math.round(this.robot.x + Math.cos(rad) * dist);
+        const cy = Math.round(this.robot.y + Math.sin(rad) * dist);
+        
+        const isRock = this.virtualRocks.some(r => r.x === cx && r.y === cy);
+        return { isRock: isRock, pos: { x: cx, y: cy } };
+    }
+
+    updateOccupancyGrid() {
+        const rad = this.robot.heading * Math.PI / 180;
+        const range = this.sensors.tof_low;
+
+        for (let i = 0; i < range; i += 0.5) {
+            const cx = Math.floor(this.robot.x + Math.cos(rad) * i);
+            const cy = Math.floor(this.robot.y + Math.sin(rad) * i);
+            if (cx >= 0 && cx < GRID_W && cy >= 0 && cy < GRID_H) {
+                if (this.occupancyGrid[cx][cy] === C_UNKNOWN) this.occupancyGrid[cx][cy] = C_FREE;
+            }
+        }
+
+        if (range < 20.0) {
+            const ox = Math.floor(this.robot.x + Math.cos(rad) * range);
+            const oy = Math.floor(this.robot.y + Math.sin(rad) * range);
+            if (ox >= 0 && ox < GRID_W && oy >= 0 && oy < GRID_H) {
+                this.occupancyGrid[ox][oy] = C_OCCUPIED;
+            }
+        }
+    }
+
+    navigateStep(speed = ROBOT_SPEED) {
+        const dx = this.robot.target.x - this.robot.x;
+        const dy = this.robot.target.y - this.robot.y;
+        const targetAngle = Math.atan2(dy, dx) * 180 / Math.PI;
+        let angleDiff = targetAngle - this.robot.heading;
+
+        while (angleDiff > 180) angleDiff -= 360;
+        while (angleDiff < -180) angleDiff += 360;
+
+        if (Math.abs(angleDiff) > 5) { 
+            this.robot.heading += Math.sign(angleDiff) * Math.min(Math.abs(angleDiff), TURN_SPEED);
+        } else {
+            const rad = this.robot.heading * Math.PI / 180;
+            let nextX = this.robot.x + Math.cos(rad) * speed;
+            let nextY = this.robot.y + Math.sin(rad) * speed;
+            let gx = Math.floor(nextX);
+            let gy = Math.floor(nextY);
+            
+            if (gx >= 0 && gx < GRID_W && gy >= 0 && gy < GRID_H) {
+                if (this.occupancyGrid[gx][gy] !== C_OCCUPIED) {
+                    this.robot.x = nextX; this.robot.y = nextY;
+                } else {
+                    this.robot.state = 'STATE_AVOID_OBSTACLE';
+                }
+            }
+        }
+    }
+
+    evaluateAndSelectFrontier() {
+        let best = null; let minDist = 9999;
+        for (let x = 1; x < GRID_W - 1; x++) {
+            for (let y = 1; y < GRID_H - 1; y++) {
+                if (this.occupancyGrid[x][y] === C_FREE) {
+                    const isFrontier = (
+                        this.occupancyGrid[x+1][y] === C_UNKNOWN || this.occupancyGrid[x-1][y] === C_UNKNOWN ||
+                        this.occupancyGrid[x][y+1] === C_UNKNOWN || this.occupancyGrid[x][y-1] === C_UNKNOWN
+                    );
+                    if (isFrontier) {
+                        const d = Math.hypot(x - this.robot.x, y - this.robot.y);
+                        // FIX: Increased distance requirement to prevent picking targets inside walls
+                        if (d < minDist && d > 5.0) { 
+                            minDist = d; 
+                            best = { x, y }; 
+                        }
+                    }
+                }
+            }
+        }
+        return best || { x: -1, y: -1 };
+    }
+
+    analyzeRockSample() {
+        const alertEl = document.getElementById('ui-alert');
+        alertEl.style.display = 'block';
+        
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
+        const temp = (-20 + Math.random() * 50).toFixed(1);
+        
+        const sample = {
+            id: "R-" + Math.floor(Math.random()*10000),
+            x: this.robot.x.toFixed(1), y: this.robot.y.toFixed(1),
+            type: this.robot.detectedRock ? this.robot.detectedRock.type : 'UNKNOWN',
+            r, g, b, temp
+        };
+
+        setTimeout(() => {
+            alertEl.style.display = 'none';
+            this.addRockToUI(sample);
+        }, 500);
+    }
+
+    // --- Visualization ---
+
+    draw() {
+        this.ctx.fillStyle = '#0b0c10';
+        this.ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+        for (let x = 0; x < GRID_W; x++) {
+            for (let y = 0; y < GRID_H; y++) {
+                const val = this.occupancyGrid[x][y];
+                if (val === C_FREE) {
+                    this.ctx.fillStyle = '#2c3e50';
+                    this.ctx.fillRect(x*PIXEL_SCALE, y*PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE);
+                } else if (val === C_OCCUPIED) {
+                    this.ctx.fillStyle = '#ff2e63';
+                    this.ctx.shadowBlur = 5;
+                    this.ctx.shadowColor = '#ff2e63';
+                    // Draw +1 pixel for solid perimeter
+                    this.ctx.fillRect(x*PIXEL_SCALE, y*PIXEL_SCALE, PIXEL_SCALE+1, PIXEL_SCALE+1);
+                    this.ctx.shadowBlur = 0;
+                }
+            }
+        }
+
+        if (this.robot.target.x !== -1) {
+            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            this.ctx.lineWidth = 1;
+            this.ctx.strokeRect(this.robot.target.x*PIXEL_SCALE - 5, this.robot.target.y*PIXEL_SCALE - 5, PIXEL_SCALE+10, PIXEL_SCALE+10);
+        }
+
+        const cx = this.robot.x * PIXEL_SCALE;
+        const cy = this.robot.y * PIXEL_SCALE;
+        const rad = this.robot.heading * Math.PI / 180;
+        this.ctx.save();
+        this.ctx.translate(cx, cy);
+        this.ctx.rotate(rad);
+        this.ctx.fillStyle = '#66fcf1';
+        this.ctx.beginPath();
+        this.ctx.moveTo(6, 0);
+        this.ctx.lineTo(-4, 4);
+        this.ctx.lineTo(-4, -4);
+        this.ctx.fill();
+        this.ctx.restore();
+    }
+
+    drawRobotView() {
+        const ctx = this.pilotCtx;
+        const w = 200, h = 160;
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = '#222'; ctx.lineWidth = 1;
+        for(let i=0; i<w; i+=20) {
+            ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, h); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(w, i); ctx.stroke();
+        }
+
+        const cx = w/2, cy = h/2;
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(-this.robot.heading * Math.PI / 180);
+
+        ctx.fillStyle = '#444';
+        ctx.beginPath();
+        ctx.roundRect(-15, -20, 30, 40, 5);
+        ctx.fill();
+        ctx.strokeStyle = '#666'; ctx.stroke();
+
+        const sensorY = -20;
+        const range = this.sensors.tof_low * 5;
+        ctx.beginPath();
+        ctx.moveTo(0, sensorY);
+        ctx.arc(0, sensorY, range, -Math.PI/4, Math.PI/4);
+        ctx.closePath();
+        if (this.sensors.tof_low < OBSTACLE_STOP_DIST) {
+            ctx.fillStyle = 'rgba(255, 46, 99, 0.4)'; ctx.strokeStyle = '#ff2e63';
+        } else {
+            ctx.fillStyle = 'rgba(102, 252, 241, 0.1)'; ctx.strokeStyle = '#66fcf1';
+        }
+        ctx.fill(); ctx.stroke();
+
+        [ -12, 12 ].forEach(x => {
+            ctx.beginPath();
+            ctx.arc(x, -15, 4, 0, Math.PI*2);
+            ctx.fillStyle = (this.robot.ir_left_alert || this.robot.ir_right_alert) ? '#ff0000' : '#00ff00';
+            ctx.fill();
+            ctx.stroke();
+        });
+        ctx.restore();
+    }
+
+    updateUI() {
+        document.getElementById('ui-state').innerText = this.robot.state;
+        document.getElementById('ui-pos').innerText = `${this.robot.x.toFixed(1)}, ${this.robot.y.toFixed(1)}`;
+        document.getElementById('ui-head').innerText = `${Math.floor(this.robot.heading)}°`;
+        document.getElementById('ui-target').innerText = (this.robot.target.x === -1) ? "Manual" : `${this.robot.target.x}, ${this.robot.target.y}`;
+        document.getElementById('ui-sensor').innerText = `${(this.sensors.tof_low*100).toFixed(0)}mm`;
+    }
+
+    addRockToUI(sample) {
+        const list = document.getElementById('rock-list');
+        if (list.children[0]?.innerText.includes("No samples")) list.innerHTML = '';
+        const colorHex = "#" + ((1 << 24) + (sample.r << 16) + (sample.g << 8) + sample.b).toString(16).slice(1);
+        const div = document.createElement('div');
+        div.className = 'rock-card';
+        div.innerHTML = `
+            <div class="rock-header"><span>${sample.id}</span><span>${sample.type}</span></div>
+            <div class="rock-details">
+                <div style="margin-bottom:4px;">TEMP: ${sample.temp}°C</div>
+                <div>COORD: [${sample.x}, ${sample.y}]</div>
+                <div style="margin-top:4px; display:flex; align-items:center;">
+                    COLOR: <span class="color-preview" style="background-color: ${colorHex};"></span>
+                    RGB(${sample.r}, ${sample.g}, ${sample.b})
+                </div>
+            </div>
+        `;
+        list.prepend(div);
+    }
+}
+
+const mission = new MissionControl();
+</script>
+</body>
+</html>
