@@ -1,0 +1,355 @@
+import paho.mqtt.client as mqtt
+import json
+import datetime
+
+# ===== MAP IMPORTS =====
+import matplotlib.pyplot as plt
+import numpy as np
+
+# --- SETTINGS ---
+BROKER = "mqtt.ics.ele.tue.nl"
+
+# Robot A Credentials
+USER_A = "robot_66_1"
+PASS_A = "cSTY2NJS"
+ID_A   = "66"
+
+# Robot B Credentials
+USER_B = "robot_6_1"
+PASS_B = "f8rWApIb"
+ID_B   = "6"
+
+# Topics
+A_SEND = f"/pynqbridge/{ID_A}/send"
+A_RECV = f"/pynqbridge/{ID_A}/recv"
+
+B_SEND = f"/pynqbridge/{ID_B}/send"
+B_RECV = f"/pynqbridge/{ID_B}/recv"
+
+LOG_FILE = "pynq_mission_log.json"
+
+# --- MEMORY ---
+last_known_data = {
+    ID_A: None,
+    ID_B: None
+}
+
+# ===== MAP DATA =====
+
+robots = {
+    "r1": {
+        "x": 0,
+        "y": 0,
+        "theta": 0,
+        "trail": []
+    },
+    "r2": {
+        "x": 0,
+        "y": 0,
+        "theta": 0,
+        "trail": []
+    }
+}
+
+plt.ion()
+
+fig, ax = plt.subplots(figsize=(12, 8))
+
+# ===== MAP FUNCTION =====
+
+def draw_map():
+
+    ax.clear()
+
+    # Draw robot trails
+    for robot_name in robots:
+
+        trail = robots[robot_name]["trail"]
+
+        if len(trail) > 1:
+
+            xs = [p[0] for p in trail]
+            ys = [p[1] for p in trail]
+
+            ax.plot(
+                xs,
+                ys,
+                linewidth=2,
+                label=f"{robot_name} path"
+            )
+
+    # Draw robots
+    for robot_name in robots:
+
+        x = robots[robot_name]["x"]
+        y = robots[robot_name]["y"]
+        theta = robots[robot_name]["theta"]
+
+        ax.scatter(
+            x,
+            y,
+            s=250
+        )
+
+        dx = np.cos(theta) * 0.3
+        dy = np.sin(theta) * 0.3
+
+        ax.arrow(
+            x,
+            y,
+            dx,
+            dy,
+            head_width=0.08,
+            length_includes_head=True
+        )
+
+        ax.text(
+            x,
+            y,
+            robot_name,
+            fontsize=12
+        )
+
+    ax.set_title(
+        "VENUS Mission Live Map"
+    )
+
+    ax.set_xlabel(
+        "X Position (m)"
+    )
+
+    ax.set_ylabel(
+        "Y Position (m)"
+    )
+
+    ax.grid(True)
+
+    if len(ax.lines) > 0:
+        ax.legend()
+
+    ax.set_aspect("equal")
+
+    plt.pause(0.01)
+
+# --- SHARED LOGGING FUNCTION ---
+
+def log_and_parse(robot_id, payload):
+
+    try:
+
+        raw_payload = payload.decode(
+            "utf-8",
+            errors="ignore"
+        )
+
+        start_index = raw_payload.find('{')
+
+        if start_index != -1:
+
+            clean_json = raw_payload[start_index:]
+
+            mission_data = json.loads(clean_json)
+
+            # ===== MAP UPDATE =====
+
+            msg_type = mission_data.get("type")
+
+            if msg_type == "pose":
+
+                robot_name = mission_data.get("robot")
+
+                if robot_name not in robots:
+
+                    robots[robot_name] = {
+                        "x": 0,
+                        "y": 0,
+                        "theta": 0,
+                        "trail": []
+                    }
+
+                x = float(
+                    mission_data.get("x", 0)
+                )
+
+                y = float(
+                    mission_data.get("y", 0)
+                )
+
+                theta = float(
+                    mission_data.get("theta", 0)
+                )
+
+                robots[robot_name]["x"] = x
+                robots[robot_name]["y"] = y
+                robots[robot_name]["theta"] = theta
+
+                robots[robot_name]["trail"].append(
+                    (x, y)
+                )
+
+                draw_map()
+
+            # ===== ORIGINAL LOGGING =====
+
+            log_entry = {
+
+                "timestamp":
+                datetime.datetime.now().strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                ),
+
+                "sender_id": robot_id,
+
+                "data": mission_data
+            }
+
+            with open(LOG_FILE, "a") as f:
+                f.write(json.dumps(log_entry) + "\n")
+
+            print(
+                f"\nLOG: Captured new data from {robot_id}"
+            )
+
+            print(f"DATA: {mission_data}")
+
+            return True
+
+    except Exception as e:
+
+        print(f"LOG ERROR: {e}")
+
+    return False
+
+# --- CALLBACKS ---
+
+def on_message_from_A(client, userdata, msg):
+
+    global last_known_data
+
+    try:
+
+        raw_payload = msg.payload.decode(
+            "utf-8",
+            errors="ignore"
+        )
+
+        start_index = raw_payload.find('{')
+
+        if start_index != -1:
+
+            mission_data = json.loads(
+                raw_payload[start_index:]
+            )
+
+            if mission_data == last_known_data[ID_A]:
+                return
+
+            last_known_data[ID_A] = mission_data
+
+    except Exception:
+        pass
+
+    log_and_parse(ID_A, msg.payload)
+
+    client_b.publish(B_RECV, msg.payload)
+
+    print(
+        f"RELAY: {ID_A} >>> {ID_B}"
+    )
+
+def on_message_from_B(client, userdata, msg):
+
+    global last_known_data
+
+    try:
+
+        raw_payload = msg.payload.decode(
+            "utf-8",
+            errors="ignore"
+        )
+
+        start_index = raw_payload.find('{')
+
+        if start_index != -1:
+
+            mission_data = json.loads(
+                raw_payload[start_index:]
+            )
+
+            if mission_data == last_known_data[ID_B]:
+                return
+
+            last_known_data[ID_B] = mission_data
+
+    except Exception:
+        pass
+
+    log_and_parse(ID_B, msg.payload)
+
+    client_a.publish(A_RECV, msg.payload)
+
+    print(
+        f"RELAY: {ID_B} >>> {ID_A}"
+    )
+
+# --- INITIALIZE CLIENTS ---
+
+client_a = mqtt.Client(
+    callback_api_version=
+    mqtt.CallbackAPIVersion.VERSION1
+)
+
+client_a.username_pw_set(
+    USER_A,
+    PASS_A
+)
+
+client_a.on_message = on_message_from_A
+
+client_b = mqtt.Client(
+    callback_api_version=
+    mqtt.CallbackAPIVersion.VERSION1
+)
+
+client_b.username_pw_set(
+    USER_B,
+    PASS_B
+)
+
+client_b.on_message = on_message_from_B
+
+# --- RUN LOOP ---
+
+try:
+
+    print(
+        "Starting Bi-Directional Bridge..."
+    )
+
+    client_a.connect(BROKER)
+
+    client_b.connect(BROKER)
+
+    client_a.subscribe(A_SEND)
+
+    client_b.subscribe(B_SEND)
+
+    print(
+        "Bridge Active. Listening..."
+    )
+
+    client_a.loop_start()
+
+    client_b.loop_forever()
+
+except KeyboardInterrupt:
+
+    print("\nShutting down bridge...")
+
+    client_a.loop_stop()
+
+    client_b.loop_stop()
+ 
+    client_a.disconnect()
+
+    client_b.disconnect()
