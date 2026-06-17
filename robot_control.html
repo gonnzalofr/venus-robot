@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rover Mission Control // Live</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #17161b;
+            --panel: rgba(28, 27, 32, 0.72);
+            --panel-solid: #1b1a20;
+            --panel-2: #201f25;
+            --foreground: #c8c7cc;
+            --muted: #8f8d96;
+            --primary: #e58b4d;
+            --primary-press: #d6783a;
+            --primary-foreground: #17161b;
+            --border: #2b2a31;
+            --border-soft: rgba(255, 255, 255, 0.06);
+            --accent: #34323b;
+            --radius: 14px;
+            --color-unknown: #0d0c10;
+            --color-free: #232128;
+            --warn: #e6c357;
+            --crit: #e5564e;
+            --ok: #5ad17f;
+            --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', 'Courier New', monospace;
+            --font-serif: Georgia, 'Times New Roman', serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        body { background: var(--background); color: var(--foreground); font-family: var(--font-mono);
+               letter-spacing: -0.01em; height: 100vh; display: flex; overflow: hidden; }
+        body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+               background: radial-gradient(120% 80% at 50% -10%, rgba(229,139,77,0.07), transparent 60%); }
+        #app { display: flex; width: 100%; height: 100%; position: relative; z-index: 1; }
+        .map-section { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 24px;
+               background: linear-gradient(180deg, rgba(255,255,255,0.015), transparent 28%),
+                           radial-gradient(80% 60% at 50% 0%, #1d1b23 0%, var(--background) 70%);
+               border-right: 1px solid var(--border); position: relative; }
+        .map-section::before, .map-section::after { content: ''; position: absolute; top: 0; bottom: 0; width: 1px; background: var(--border-soft); }
+        .map-section::before { left: 24px; } .map-section::after { right: 24px; }
+        .top-hud { width: 100%; display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; padding: 0 6px; z-index: 1; }
+        .pilot-cam { width: 210px; height: 168px; background: #0c0b0f; border: 1px solid var(--border);
+               border-radius: var(--radius); overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.45); flex-shrink: 0; position: relative; }
+        .pilot-head { background: rgba(229,139,77,0.12); color: var(--primary); font-size: 10px; font-weight: 600;
+               padding: 6px 10px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.08em;
+               text-transform: uppercase; position: absolute; top: 0; left: 0; width: 100%; z-index: 10;
+               border-bottom: 1px solid var(--border-soft); backdrop-filter: blur(6px); }
+        .dot { width: 7px; height: 7px; border-radius: 50%; background: #555; }
+        .dot.live { background: var(--ok); animation: blink 1.4s infinite; box-shadow: 0 0 8px var(--ok); }
+        @keyframes blink { 50% { opacity: 0.3; } }
+        .hud { background: var(--panel); padding: 14px; border: 1px solid var(--border); font-size: 11px;
+               pointer-events: none; backdrop-filter: blur(12px); min-width: 214px; border-radius: var(--radius);
+               box-shadow: 0 20px 50px rgba(0,0,0,0.35); }
+        .hud-row { margin-bottom: 6px; display: flex; justify-content: space-between; gap: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+        .hud-val { color: var(--foreground); font-weight: 600; }
+        .hud-val.live { color: var(--primary); }
+        .map-wrap { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border);
+               box-shadow: 0 30px 80px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.02); }
+        canvas { display: block; background: var(--color-unknown); }
+        .sidebar { width: 384px; background: var(--panel-solid); display: flex; flex-direction: column; padding: 24px; overflow-y: auto; border-left: 1px solid var(--border); }
+        h2 { font-family: var(--font-serif); color: var(--foreground); margin-bottom: 22px; border-bottom: 1px solid var(--border);
+             padding-bottom: 16px; font-size: 26px; font-weight: 400; line-height: 1.1; }
+        h2 .accent { color: var(--primary); }
+        h3 { font-size: 13px; color: var(--muted); margin-bottom: 12px; border-bottom: 1px solid var(--border);
+             padding-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+        .panel { background: var(--panel-2); padding: 18px; border-radius: var(--radius); margin-bottom: 18px; border: 1px solid var(--border); }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .btn-group.full { grid-template-columns: 1fr; }
+        input.url { width: 100%; padding: 9px 11px; background: var(--panel-solid); border: 1px solid var(--border);
+             border-radius: 10px; color: var(--foreground); font-family: var(--font-mono); font-size: 11px; margin-bottom: 10px; }
+        button { padding: 10px 12px; cursor: pointer; background: var(--accent); color: var(--foreground);
+             border: 1px solid var(--border); border-radius: 999px; font-weight: 600; text-transform: uppercase;
+             font-size: 10px; letter-spacing: 0.06em; font-family: var(--font-mono); transition: all 0.15s ease; }
+        button:active { transform: scale(0.97); }
+        button:hover:not(:disabled) { border-color: var(--primary); }
+        button:disabled { background: var(--panel-2); border-color: var(--border); cursor: not-allowed; color: #5b5961; }
+        button.primary { background: var(--primary); color: var(--primary-foreground); border-color: transparent;
+             box-shadow: inset 0 0 0 2.5px rgba(255,255,255,0.08), 0 8px 20px rgba(229,139,77,0.22); }
+        button.primary:hover:not(:disabled) { background: var(--primary-press); }
+        button.stop { background: transparent; color: var(--crit); border-color: rgba(229,86,78,0.4); }
+        button.stop:hover:not(:disabled) { background: rgba(229,86,78,0.12); border-color: var(--crit); }
+        button.toggle.active { background: var(--primary); color: var(--primary-foreground); border-color: transparent; box-shadow: inset 0 0 0 2.5px rgba(255,255,255,0.08); }
+        .mode-toggle { display: flex; gap: 8px; margin-bottom: 12px; }
+        .mode-toggle button { flex: 1; }
+        .manual { margin-top: 6px; padding-top: 14px; border-top: 1px dashed var(--border); }
+        .d-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 162px; margin: 0 auto; }
+        .d-pad button { height: 44px; font-size: 16px; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+        .hint { font-size: 10px; color: #6a6873; margin-top: 8px; line-height: 1.5; text-align: center; }
+        .link-status { font-size: 11px; color: var(--muted); margin-top: 10px; }
+        .link-status b { color: var(--primary); font-weight: 600; }
+        .rocks { flex: 1; overflow-y: auto; }
+        .rock-card { background: var(--panel-2); border: 1px solid var(--border); border-left: 3px solid var(--primary);
+             margin-bottom: 12px; padding: 14px; border-radius: 12px; animation: slideIn 0.4s ease-out; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
+        .rock-h { display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--foreground); font-weight: 700; font-size: 12px; }
+        .rock-d { font-size: 12px; color: var(--muted); line-height: 1.7; }
+        .swatch { width: 11px; height: 11px; display: inline-block; border-radius: 50%; margin-right: 6px; border: 1px solid rgba(255,255,255,0.3); vertical-align: middle; }
+        .empty { text-align: center; padding: 20px; color: #4a4850; font-size: 12px; }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    </style>
+    <!-- MQTT-over-WebSocket client, for the optional wireless (MQTT) live feed.
+         If you have no internet on the dashboard machine, download mqtt.min.js
+         next to this file and change the src to "mqtt.min.js". -->
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="map-section">
+        <div class="top-hud">
+            <div class="hud">
+                <div class="hud-row">LINK: <span class="hud-val" id="h-link">offline</span></div>
+                <div class="hud-row">STATE: <span class="hud-val live" id="h-state">—</span></div>
+                <div class="hud-row">POS: <span class="hud-val" id="h-pos">0.00, 0.00</span></div>
+                <div class="hud-row">HDG: <span class="hud-val" id="h-hdg">0°</span></div>
+                <div class="hud-row">SAMPLES: <span class="hud-val" id="h-samples">0</span></div>
+            </div>
+            <div class="pilot-cam">
+                <div class="pilot-head"><span>PILOT CAM</span><div class="dot" id="pilot-dot"></div></div>
+                <canvas id="pilot" width="200" height="160"></canvas>
+            </div>
+        </div>
+        <div class="map-wrap"><canvas id="map" width="468" height="598"></canvas></div>
+    </div>
+
+    <div class="sidebar">
+        <h2>Mission <span class="accent">Control</span></h2>
+
+        <div class="panel">
+            <h3>Connection</h3>
+            <input id="ws-url" class="url" placeholder="ws://10.43.0.1:8765" value="ws://10.43.0.1:8765">
+            <div class="btn-group full"><button id="b-wifi" class="primary" onclick="connectWifi()">Connect (WiFi)</button></div>
+            <div class="btn-group">
+                <button id="b-usb" onclick="connectUsb()">Connect (USB)</button>
+                <button id="b-disc" onclick="disconnect()" disabled>Disconnect</button>
+            </div>
+            <div class="link-status">Link: <b id="link-detail">disconnected</b></div>
+        </div>
+
+        <div class="panel">
+            <h3>Control</h3>
+            <div class="mode-toggle">
+                <button id="m-auto" class="toggle active" onclick="setManual(false)">Auto Pilot</button>
+                <button id="m-man"  class="toggle" onclick="setManual(true)">Manual</button>
+            </div>
+            <div class="btn-group" id="auto-controls">
+                <button id="b-explore" class="primary" onclick="cmdExplore()" disabled>Explore</button>
+                <button id="b-stop" class="stop" onclick="cmdStop()" disabled>Stop</button>
+            </div>
+            <div class="manual" id="manual-panel" style="display:none;">
+                <div class="hint">DRIVE &middot; hold the arrows or W A S D</div>
+                <div class="d-pad">
+                    <div></div>
+                    <button onmousedown="mkey('up',1)" onmouseup="mkey('up',0)" ontouchstart="mkey('up',1)" ontouchend="mkey('up',0)">▲</button>
+                    <div></div>
+                    <button onmousedown="mkey('left',1)" onmouseup="mkey('left',0)" ontouchstart="mkey('left',1)" ontouchend="mkey('left',0)">◀</button>
+                    <button onmousedown="mkey('down',1)" onmouseup="mkey('down',0)" ontouchstart="mkey('down',1)" ontouchend="mkey('down',0)">▼</button>
+                    <button onmousedown="mkey('right',1)" onmouseup="mkey('right',0)" ontouchstart="mkey('right',1)" ontouchend="mkey('right',0)">▶</button>
+                </div>
+            </div>
+            <div class="hint">Click the map to send the rover to a point (auto mode).</div>
+        </div>
+
+        <div class="panel" style="flex:1; display:flex; flex-direction:column;">
+            <h3>Sample Database</h3>
+            <div class="rocks" id="rock-list"><div class="empty">No samples yet.</div></div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ===================== constants + helpers ===================== */
+const GRID_W = 36, GRID_H = 46, SCALE = 13;    /* 36x46 cells = 100x130 cm arena @ 3cm/cell */
+const CANVAS_W = GRID_W * SCALE, CANVAS_H = GRID_H * SCALE;
+const M_PER_CELL = 0.03, OX = 18, OY = 23;     /* 3cm cells; world (0,0) -> centre; +Y up */
+const T_UNKNOWN = -1, T_FREE = 0, T_MOUNTAIN = 1, T_BOUNDARY = 2;
+const COL_FREE = '#232128', COL_MOUNTAIN = '#ffffff', COL_BOUNDARY = '#4a7a99';
+const COL_BG = '#0d0c10', COL_ROVER = '#e58b4d';
+
+const clamp = (v, lo, hi) => v < lo ? lo : (v > hi ? hi : v);
+function colorHex(c) {
+    switch ((c || '').toLowerCase()) {
+        case 'red': return '#ff6b6b'; case 'green': return '#6bdf6b';
+        case 'blue': return '#6b9bff'; case 'yellow': return '#fce38a';
+        case 'white': return '#e8e8e8'; case 'black': return '#555a66';
+        default: return '#aaaaaa';
+    }
+}
+
+/* ===================== live robot view (render only) ===================== */
+class RobotView {
+    constructor() {
+        this.map = document.getElementById('map');   this.ctx = this.map.getContext('2d');
+        this.pilot = document.getElementById('pilot'); this.pctx = this.pilot.getContext('2d');
+        this.reset();
+    }
+    reset() {
+        this.map.width = CANVAS_W; this.map.height = CANVAS_H;
+        this.grid = Array.from({length: GRID_W}, () => Array(GRID_H).fill(T_UNKNOWN));
+        this.rocks = [];          /* {gx, gy, color} */
+        this.loggedRocks = new Set();
+        this.robot = { x: OX, y: OY, heading: 0 };
+        this.target = null;
+        this.live = false;
+        this.state = '—';
+        document.getElementById('rock-list').innerHTML = '<div class="empty">No samples yet.</div>';
+        document.getElementById('h-samples').textContent = '0';
+        this.draw(); this.drawPilot(); this.updateHUD();
+    }
+    w2g(x, y) { return { gx: OX + x / M_PER_CELL, gy: OY - y / M_PER_CELL }; }
+    g2w(gx, gy) { return { x: (gx - OX) * M_PER_CELL, y: (OY - gy) * M_PER_CELL }; }
+
+    setPose(x, y, theta) {
+        const g = this.w2g(x, y);
+        this.robot.x = clamp(g.gx, 0, GRID_W);
+        this.robot.y = clamp(g.gy, 0, GRID_H);
+        this.robot.heading = -theta * 180 / Math.PI;   /* canvas deg (Y flipped) */
+        this.markScanned(g.gx, g.gy);   /* the rover scans its surroundings as it goes */
+        this.draw(); this.drawPilot(); this.updateHUD();
+    }
+    /* Reveal the locally-scanned area as explored (mirrors the firmware's per-
+     * waypoint 360deg scan). Only fills UNKNOWN cells, so mapped mountains / tape
+     * / rocks stay as they are. */
+    markScanned(gx, gy, r = 4) {
+        const cx = Math.floor(gx), cy = Math.floor(gy);
+        for (let dx = -r; dx <= r; dx++) for (let dy = -r; dy <= r; dy++) {
+            if (dx * dx + dy * dy > r * r) continue;
+            const x = cx + dx, y = cy + dy;
+            if (x >= 0 && x < GRID_W && y >= 0 && y < GRID_H && this.grid[x][y] === T_UNKNOWN)
+                this.grid[x][y] = T_FREE;
+        }
+    }
+    markRayClear(fgx, fgy, tgx, tgy) {
+        const steps = Math.max(1, Math.ceil(Math.hypot(tgx - fgx, tgy - fgy)));
+        for (let i = 1; i < steps; i++) {
+            const t = i / steps;
+            const cx = Math.floor(fgx + (tgx - fgx) * t), cy = Math.floor(fgy + (tgy - fgy) * t);
+            if (cx >= 0 && cx < GRID_W && cy >= 0 && cy < GRID_H && this.grid[cx][cy] === T_UNKNOWN)
+                this.grid[cx][cy] = T_FREE;
+        }
+    }
+    observe(kind, x, y, color, conf, size, temp) {
+        const g = this.w2g(x, y);
+        const cx = Math.floor(g.gx), cy = Math.floor(g.gy);
+        if (cx < 0 || cx >= GRID_W || cy < 0 || cy >= GRID_H) return;
+        this.markRayClear(this.robot.x, this.robot.y, g.gx, g.gy);
+        if (kind === 'mountain') {
+            if (this.grid[cx][cy] === T_UNKNOWN || this.grid[cx][cy] === T_FREE) this.grid[cx][cy] = T_MOUNTAIN;
+        } else if (kind === 'black_tape') {
+            if (this.grid[cx][cy] === T_UNKNOWN || this.grid[cx][cy] === T_FREE) this.grid[cx][cy] = T_BOUNDARY;
+        } else if (kind === 'scannable') {
+            const key = cx + ',' + cy;
+            if (!this.loggedRocks.has(key)) {
+                this.loggedRocks.add(key);
+                this.rocks.push({ gx: cx, gy: cy, color: colorHex(color), size: (size === 2 ? 2 : 1) });
+                this.addSample({ color: color, x: x, y: y, conf: conf, size: (size === 2 ? 2 : 1), temp: temp });
+            }
+        }
+        this.draw();
+    }
+    draw() {
+        const c = this.ctx;
+        c.fillStyle = COL_BG; c.fillRect(0, 0, CANVAS_W, CANVAS_H);
+        for (let x = 0; x < GRID_W; x++) for (let y = 0; y < GRID_H; y++) {
+            const t = this.grid[x][y]; let col = null;
+            if (t === T_FREE) col = COL_FREE;
+            else if (t === T_MOUNTAIN) col = COL_MOUNTAIN;
+            else if (t === T_BOUNDARY) col = COL_BOUNDARY;
+            if (col) {
+                c.fillStyle = col;
+                if (t === T_MOUNTAIN) { c.shadowBlur = 10; c.shadowColor = '#fff'; } else c.shadowBlur = 0;
+                c.fillRect(x * SCALE, y * SCALE, SCALE, SCALE); c.shadowBlur = 0;
+            }
+        }
+        for (const r of this.rocks) {
+            const s = (r.size || 1) * SCALE;      /* small = 1 cell, big = 2x2 cells */
+            c.fillStyle = r.color; c.shadowBlur = 8; c.shadowColor = r.color;
+            c.fillRect(r.gx * SCALE, r.gy * SCALE, s, s); c.shadowBlur = 0;
+        }
+        if (this.target) {
+            const tx = (this.target.gx + 0.5) * SCALE, ty = (this.target.gy + 0.5) * SCALE;
+            const rx = this.robot.x * SCALE, ry = this.robot.y * SCALE;
+            /* planned path: rover -> chosen frontier */
+            c.strokeStyle = 'rgba(229,139,77,0.35)'; c.lineWidth = 1.5; c.setLineDash([5, 5]);
+            c.beginPath(); c.moveTo(rx, ry); c.lineTo(tx, ty); c.stroke();
+            /* goal marker: dashed ring + crosshair */
+            c.strokeStyle = COL_ROVER; c.lineWidth = 2;
+            c.beginPath(); c.arc(tx, ty, 11, 0, Math.PI * 2); c.stroke();
+            c.setLineDash([]);
+            c.beginPath();
+            c.moveTo(tx - 16, ty); c.lineTo(tx - 6, ty); c.moveTo(tx + 6, ty); c.lineTo(tx + 16, ty);
+            c.moveTo(tx, ty - 16); c.lineTo(tx, ty - 6); c.moveTo(tx, ty + 6); c.lineTo(tx, ty + 16);
+            c.stroke();
+            c.fillStyle = COL_ROVER; c.beginPath(); c.arc(tx, ty, 2.5, 0, Math.PI * 2); c.fill();
+        }
+        const px = this.robot.x * SCALE, py = this.robot.y * SCALE, rad = this.robot.heading * Math.PI / 180;
+        c.save(); c.translate(px, py); c.rotate(rad);
+        c.fillStyle = COL_ROVER; c.beginPath(); c.moveTo(7, 0); c.lineTo(-5, 5); c.lineTo(-5, -5); c.fill();
+        c.restore();
+    }
+    drawPilot() {
+        const c = this.pctx, w = 200, h = 160;
+        c.fillStyle = '#000'; c.fillRect(0, 0, w, h);
+        c.save(); c.translate(w / 2, h / 2); c.rotate(this.robot.heading * Math.PI / 180);
+        c.fillStyle = '#444'; c.beginPath(); c.roundRect(-20, -15, 40, 30, 5); c.fill();
+        c.strokeStyle = '#666'; c.lineWidth = 2; c.stroke();
+        const beam = this.live ? 'rgba(229,139,77,0.85)' : 'rgba(90,90,100,0.5)';
+        c.strokeStyle = beam; c.lineWidth = 3; c.beginPath(); c.moveTo(20, 0); c.lineTo(80, 0); c.stroke();
+        c.beginPath(); c.arc(80, 0, 4, 0, Math.PI * 2); c.fillStyle = beam; c.fill();
+        [-15, 15].forEach(yy => { c.beginPath(); c.arc(0, yy, 4, 0, Math.PI * 2);
+            c.fillStyle = this.live ? '#5ad17f' : '#555'; c.fill(); c.stroke(); });
+        c.restore();
+        c.fillStyle = 'rgba(0,0,0,0.1)'; for (let i = 0; i < h; i += 4) c.fillRect(0, i, w, 1);
+    }
+    updateHUD() {
+        const wx = (this.robot.x - OX) * M_PER_CELL, wy = (OY - this.robot.y) * M_PER_CELL;
+        document.getElementById('h-pos').textContent = wx.toFixed(2) + ', ' + wy.toFixed(2);
+        document.getElementById('h-hdg').textContent = Math.round(-this.robot.heading) + '°';
+        document.getElementById('h-state').textContent = this.state;
+        document.getElementById('h-samples').textContent = String(this.rocks.length);
+        document.getElementById('pilot-dot').className = 'dot' + (this.live ? ' live' : '');
+    }
+    addSample(s) {
+        const list = document.getElementById('rock-list');
+        if (list.querySelector('.empty')) list.innerHTML = '';
+        const hex = colorHex(s.color);
+        const div = document.createElement('div');
+        div.className = 'rock-card'; div.style.borderLeftColor = hex;
+        div.innerHTML = `<div class="rock-h"><span>S-${Math.floor(Math.random()*9000+1000)}</span>
+            <span style="color:${hex}">${(s.color||'unknown').toUpperCase()}</span></div>
+            <div class="rock-d">
+              <div>COORD: [${s.x.toFixed(2)}, ${s.y.toFixed(2)}] m</div>
+              <div style="margin-top:4px;">SIZE: ${s.size === 2 ? '6×6 cm (large)' : '3×3 cm (small)'}</div>
+              <div style="margin-top:4px;">TEMP: ${(s.temp != null && !isNaN(s.temp)) ? Number(s.temp).toFixed(1) + ' °C' : '—'}</div>
+              <div style="margin-top:4px;">CONF: ${(s.conf!=null?s.conf:1).toFixed ? (s.conf||1).toFixed(2) : s.conf}</div>
+              <div style="margin-top:4px; display:flex; align-items:center;">COLOR:
+                <span class="swatch" style="background:${hex}"></span>${(s.color||'?').toUpperCase()}</div>
+            </div>`;
+        list.prepend(div);
+        document.getElementById('h-samples').textContent = String(this.rocks.length);
+    }
+}
+
+/* ===================== bridge (WiFi WebSocket / USB Web Serial) ===================== */
+/* Control is decoupled from transport: once a session is started, Explore/Stop/
+ * Manual stay live. A command sends immediately when the socket is OPEN, else the
+ * last ongoing intent is remembered and re-asserted automatically on (re)connect.
+ * WiFi auto-reconnects with exponential backoff; the map is wiped only when the
+ * user starts a fresh session, never on a transient reconnect. */
+class Bridge {
+    constructor(view) {
+        this.view = view; this.ws = null; this.port = null; this.writer = null; this.reader = null;
+        this.buf = ''; this.connected = false;
+        this.url = null; this.usb = false; this.userClosed = false;
+        this.retries = 0; this.reconnectTimer = null;
+        this.freshSession = true; this.lastIntent = null; this.lastAutoMode = null;
+        this.state = 'offline';
+    }
+    sessionActive() { return (!!this.url || this.usb) && !this.userClosed; }
+
+    /* single source of truth for both link indicators + button enablement */
+    setState(state, detail) {
+        this.state = state;
+        const active = this.sessionActive();
+        document.getElementById('h-link').textContent =
+            state === 'online' ? 'online' : (active ? state : 'offline');
+        const dl = document.getElementById('link-detail');
+        if (state === 'online') dl.innerHTML = '<b>' + (detail || 'connected') + '</b>';
+        else dl.textContent = detail || state;
+        document.getElementById('b-disc').disabled = !active;
+        document.getElementById('b-explore').disabled = !active;
+        document.getElementById('b-stop').disabled = !active;
+        document.getElementById('b-wifi').disabled = active;
+        document.getElementById('b-usb').disabled = active;
+        this.view.live = (state === 'online'); this.view.updateHUD();
+    }
+
+    connectWifi(url) {
+        this.url = url; this.usb = false; this.userClosed = false; this.retries = 0;
+        if (this.freshSession) this.view.reset();
+        this._openWs();
+    }
+    _openWs() {
+        this.setState(this.retries ? 'reconnecting' : 'connecting',
+                      this.retries ? 'reconnecting…' : 'connecting…');
+        try { this.ws = new WebSocket(this.url); }
+        catch (e) { this._scheduleReconnect('bad URL'); return; }
+        this.ws.onopen = () => {
+            this.retries = 0; this.connected = true; this.freshSession = false;
+            this.setState('online', 'connected (wifi)');
+            this._flush();
+        };
+        this.ws.onmessage = (e) => String(e.data).split('\n').forEach(l => { l = l.trim(); if (l) this.handle(l); });
+        this.ws.onerror = () => {};   /* onclose fires next and drives recovery */
+        this.ws.onclose = () => {
+            this.connected = false; this.ws = null;
+            if (this.userClosed) this.setState('offline', 'disconnected');
+            else this._scheduleReconnect('link dropped');
+        };
+    }
+    _scheduleReconnect(why) {
+        if (this.userClosed || !this.url) { this.setState('offline', why || 'disconnected'); return; }
+        const delay = Math.min(1000 * Math.pow(2, this.retries++), 15000);
+        this.setState('reconnecting', (why ? why + ' · ' : '') + 'retry in ' + Math.round(delay / 1000) + 's');
+        clearTimeout(this.reconnectTimer);
+        this.reconnectTimer = setTimeout(() => this._openWs(), delay);
+    }
+    _flush() { if (this.lastIntent) this._raw(this.lastIntent); }   /* re-assert intent on (re)connect */
+
+    async connectUsb() {
+        if (!('serial' in navigator)) { alert('Web Serial needs Chrome/Edge over http://localhost'); return; }
+        try {
+            this.port = await navigator.serial.requestPort();
+            await this.port.open({ baudRate: 115200 });
+            this.writer = this.port.writable.getWriter();
+            this.usb = true; this.url = null; this.userClosed = false; this.connected = true;
+            if (this.freshSession) this.view.reset();
+            this.freshSession = false;
+            this.setState('online', 'connected (usb)');
+            this._flush(); this.readLoop();
+        } catch (e) { this.setState('offline', 'usb error: ' + (e.message || e)); }
+    }
+    async readLoop() {
+        const dec = new TextDecoder();
+        try {
+            this.reader = this.port.readable.getReader();
+            while (this.usb) {
+                const { value, done } = await this.reader.read(); if (done) break;
+                this.buf += dec.decode(value, { stream: true });
+                let nl; while ((nl = this.buf.indexOf('\n')) !== -1) {
+                    const line = this.buf.slice(0, nl).trim(); this.buf = this.buf.slice(nl + 1);
+                    if (line) this.handle(line);
+                }
+            }
+        } catch (e) { this.setState('offline', 'usb read error'); }
+        finally { if (this.usb) this.disconnect(); }
+    }
+    async disconnect() {
+        this.userClosed = true; clearTimeout(this.reconnectTimer);
+        this.connected = false;
+        try { if (this.ws) this.ws.close(); } catch (e) {} this.ws = null;
+        try { if (this.reader) await this.reader.cancel(); } catch (e) {}
+        try { if (this.writer) this.writer.releaseLock(); } catch (e) {}
+        try { if (this.port) await this.port.close(); } catch (e) {}
+        this.port = null; this.writer = null; this.reader = null;
+        this.url = null; this.usb = false; this.freshSession = true;
+        this.lastIntent = null; this.lastAutoMode = null;
+        this.setState('offline', 'disconnected');
+    }
+
+    handle(line) {
+        let m; try { m = JSON.parse(line); } catch (e) { return; }
+        if (!m || typeof m.type !== 'string') return;
+        if (m.type === 'pose' && typeof m.x === 'number') {
+            this.view.setPose(m.x, m.y, m.theta);
+        } else if (m.type === 'plan' && typeof m.x === 'number') {
+            const g = this.view.w2g(m.x, m.y);          /* chosen frontier -> goal marker */
+            this.view.target = { gx: Math.floor(g.gx), gy: Math.floor(g.gy) };
+            this.view.draw();
+        } else if (m.type === 'observation' && typeof m.x === 'number') {
+            this.view.observe(m.kind, m.x, m.y, m.color, m.confidence, m.size, m.temp_c);
+        } else if (m.type === 'status') {
+            this.view.state = (m.detail || m.mode || '—').toUpperCase();
+            this.view.updateHUD();
+            if (this.state === 'online')
+                document.getElementById('link-detail').innerHTML =
+                    '<b>' + (m.mode || 'online') + (m.detail ? ' · ' + m.detail : '') + '</b>';
+        }
+    }
+
+    _raw(obj) {
+        const line = JSON.stringify(obj) + '\n';
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) { this.ws.send(line); return true; }
+        if (this.writer) { try { this.writer.write(new TextEncoder().encode(line)); return true; } catch (e) { return false; } }
+        return false;
+    }
+    send(obj) {
+        if (obj.type === 'mode' || obj.type === 'drive') this.lastIntent = obj;   /* remember ongoing intent */
+        if (this._raw(obj)) {
+            document.getElementById('link-detail').innerHTML = '<b>sent ' + (obj.mode || obj.type) + '</b>';
+            return true;
+        }
+        if (!this.sessionActive()) this.setState('offline', 'connect first');
+        else this.setState(this.state, 'reconnecting · will send ' + (obj.mode || obj.type));
+        return false;
+    }
+    sendMode(mode)   { this.send({ type: 'mode', mode }); }
+    sendTarget(x, y) { return this.send({ type: 'target', x, y }); }
+    sendDrive(f, t)  { this.send({ type: 'drive', fwd: f, turn: t }); }
+}
+
+/* ===================== wiring ===================== */
+const view = new RobotView();
+const bridge = new Bridge(view);
+
+/* ===================== optional: live feed over MQTT (wireless) =====================
+ * The robot mirrors every UI message onto MQTT (topic /pynqbridge/<MODULE>/send), so
+ * the dashboard keeps updating even with no ws_bridge / ethernet. Browsers can only
+ * do MQTT-over-WebSocket, so MQTT_WS_URL must be a WS endpoint -- either a broker WS
+ * listener (e.g. ws://mqtt.ics.ele.tue.nl:9001) or a local mosquitto with a WS
+ * listener bridged to the TU/e broker. DISPLAY ONLY: Explore/Stop still go over the
+ * ws_bridge (the robot reads commands from stdin, not MQTT).
+ * --> Set MQTT_MODULE to your robot's pynqbridge module number to enable. <-- */
+const MQTT_WS_URL = 'ws://localhost:9001';
+const MQTT_MODULE = '';                    /* e.g. '24'  (empty = MQTT feed disabled) */
+
+function connectMqtt() {
+    if (!MQTT_MODULE) { alert('Set MQTT_MODULE (your pynqbridge module #) in the HTML.'); return; }
+    if (typeof mqtt === 'undefined') { bridge.setState('offline', 'mqtt.js not loaded'); return; }
+    const topic = '/pynqbridge/' + MQTT_MODULE + '/send';
+    bridge.setState('connecting', 'MQTT ' + MQTT_WS_URL);
+    const client = mqtt.connect(MQTT_WS_URL, { reconnectPeriod: 2000 });
+    client.on('connect', () => { client.subscribe(topic);
+        bridge.setState('online', 'MQTT · ' + topic); view.live = true; view.drawPilot(); });
+    client.on('message', (_t, payload) => bridge.handle(payload.toString()));
+    client.on('error', (e) => bridge.setState('offline', 'MQTT err: ' + (e && e.message || e)));
+    client.on('close', () => { view.live = false; view.drawPilot(); });
+    window._mqtt = client;
+}
+if (MQTT_MODULE) connectMqtt();            /* auto-start the MQTT feed when configured */
+
+function connectWifi() { const u = document.getElementById('ws-url').value.trim();
+    if (!u) { alert('Enter ws://<pynq-ip>:8765'); return; } bridge.connectWifi(u); }
+function connectUsb() { bridge.connectUsb(); }
+function disconnect() { bridge.disconnect(); }
+
+function cmdExplore() { bridge.lastAutoMode = 'explore'; bridge.sendMode('explore'); }
+function cmdStop()    { bridge.lastAutoMode = 'stop';    bridge.sendMode('stop'); }
+
+let manualMode = false;
+const manualInput = { up: false, down: false, left: false, right: false };
+function setManual(on) {
+    manualMode = on;
+    document.getElementById('m-auto').classList.toggle('active', !on);
+    document.getElementById('m-man').classList.toggle('active', on);
+    document.getElementById('manual-panel').style.display = on ? 'block' : 'none';
+    document.getElementById('auto-controls').style.display = on ? 'none' : 'grid';
+    if (on) bridge.sendDrive(0, 0);                          /* enter manual, idle */
+    else    bridge.sendMode(bridge.lastAutoMode || 'stop');  /* back to auto: resume prior intent */
+}
+function sendDriveFromKeys() {
+    const fwd = manualInput.up ? 1 : (manualInput.down ? -1 : 0);
+    const turn = manualInput.right ? 1 : (manualInput.left ? -1 : 0);
+    bridge.sendDrive(fwd, turn);
+}
+function mkey(dir, pressed) { manualInput[dir] = !!pressed; if (manualMode) sendDriveFromKeys(); }
+
+const KEY = { ArrowUp:'up', ArrowDown:'down', ArrowLeft:'left', ArrowRight:'right',
+              w:'up', s:'down', a:'left', d:'right', W:'up', S:'down', A:'left', D:'right' };
+window.addEventListener('keydown', e => { const k = KEY[e.key]; if (!k || !manualMode) return;
+    if (e.repeat) return; e.preventDefault(); mkey(k, 1); });
+window.addEventListener('keyup', e => { const k = KEY[e.key]; if (!k) return; e.preventDefault(); mkey(k, 0); });
+
+document.getElementById('map').addEventListener('click', ev => {
+    if (!bridge.sessionActive()) { bridge.setState(bridge.state, 'connect first to set a target'); return; }
+    if (manualMode) { document.getElementById('link-detail').textContent = 'switch to Auto to set a target'; return; }
+    const r = ev.currentTarget.getBoundingClientRect();
+    const gx = (ev.clientX - r.left) / r.width * GRID_W, gy = (ev.clientY - r.top) / r.height * GRID_H;
+    const w = view.g2w(gx, gy);
+    view.target = { gx: Math.floor(gx), gy: Math.floor(gy) }; view.draw();
+    bridge.sendTarget(w.x, w.y);
+});
+
+bridge.setState('offline', 'disconnected');   /* sync indicators on load */
+</script>
+</body>
+</html>
