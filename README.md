@@ -194,18 +194,7 @@ cross‑robot de‑dup and the joint six‑cube stop work with **no coordinate t
 | | Source | `ROBOT_ID` | Start pose |
 |---|---|---|---|
 | **Robot 1** | `main.c` | `r1` | `(0,0)`, θ = **+π/2** (faces **+y**) |
-| **Robot 2** | `main2.c` | `r1` ⚠️ | `(0,0)`, θ = **−π/2** (faces **−y**) |
-
-> ⚠️ **`main2.c` has drifted behind `main.c`.** This README documents `main.c`
-> (Robot 1), the canonical build. `main2.c` is a *full standalone* build (not a
-> thin wrapper) that currently **lags** it: it classifies colour with a **single**
-> read (vs the 20‑read average in `main.c`), carries different tuning
-> (`ROCK_APPROACH_M 0.06`, `COLOR_ALIGN_DIST_M 0.05`, `ROAM_DISTANCE_M 0.25`) and a
-> different TCS3200 calibration, **and still defines `ROBOT_ID "r1"`** — so every
-> frame is tagged `r1` and mission control can't tell the robots apart. To bring
-> Robot 2 back in line, re‑sync `main2.c` from `main.c` and change *only*
-> `ROBOT_ID → "r2"` and `START_THETA_RAD → −π/2`.
-
+| **Robot 2** | `main2.c` | `r2`  | `(0,0)`, θ = **−π/2** (faces **−y**) |
 ---
 
 ## ⚙️ Tuning Constants
