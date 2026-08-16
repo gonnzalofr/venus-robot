@@ -1,0 +1,8 @@
+# Captured via 'pip freeze' from the original Venus/.venv on 2026-08-15.
+# This is a full environment snapshot including transitive dependencies,
+# not a curated top-level requirements list.
+paho-mqtt==2.1.0
+pygame-ce==2.5.7
+PyQt6==6.11.0
+PyQt6-Qt6==6.11.0
+PyQt6_sip==13.11.1

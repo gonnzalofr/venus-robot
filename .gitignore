@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.python-version
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Arduino build outputs
+*.hex
+*.elf
+*.bin
+build/
+dist/
+out/
+
+# C build artifacts
+*.o
+*.d
+NTC_testing/NTC_testing/main
+
+# Editors / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets & local config
+.env
+config.py
+*.local

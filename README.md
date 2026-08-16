@@ -197,6 +197,15 @@ cross‑robot de‑dup and the joint six‑cube stop work with **no coordinate t
 | **Robot 2** | `main2.c` | `r2`  | `(0,0)`, θ = **−π/2** (faces **−y**) |
 ---
 
+## 🐍 Mission Control UI — Dependencies
+
+Dependencies in `requirements.txt` are a `pip freeze` snapshot of the original
+development virtualenv, captured 2026-08-15 during migration from the
+`gonnzalofr/projects` monorepo. The virtualenv itself was not carried over.
+Pinned transitive dependencies are included deliberately.
+
+---
+
 ## ⚙️ Tuning Constants
 
 The behaviour above is driven by a handful of `#define`s near the top of the
