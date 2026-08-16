@@ -1,0 +1,743 @@
+{"timestamp": "2026-06-17 22:12:19", "sender_id": "66", "data": {"type": "ROCK", "x": "15", "y": "-25", "color": "Red", "size": 6, "temp": 23.4}}
+{"timestamp": "2026-06-17 22:12:19", "sender_id": "6", "data": {"type": "ROCK", "x": "40", "y": "10", "color": "Green", "size": 3, "temp": 19.5}}
+{"timestamp": "2026-06-17 22:12:35", "sender_id": "66", "data": {"type": "ROCK", "x": "15", "y": "-25", "color": "Red", "size": 6, "temp": 23.4}}
+{"timestamp": "2026-06-17 22:12:50", "sender_id": "66", "data": {"type": "ROCK", "x": "15", "y": "-25", "color": "Red", "size": 6, "temp": 23.4}}
+{"timestamp": "2026-06-18 15:09:02", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "boot"}}
+{"timestamp": "2026-06-18 15:09:02", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-18 15:09:03", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 2.3562}}
+{"timestamp": "2026-06-18 15:09:04", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 3.1416}}
+{"timestamp": "2026-06-18 15:09:04", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:09:04", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -36, "y": 0}}
+{"timestamp": "2026-06-18 15:09:05", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -2.3562}}
+{"timestamp": "2026-06-18 15:09:05", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-18 15:09:06", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -22, "y": -22}}
+{"timestamp": "2026-06-18 15:09:06", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0198, "y": -0.0198, "theta": -2.3562}}
+{"timestamp": "2026-06-18 15:09:06", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.041, "y": -0.041, "theta": -2.3562}}
+{"timestamp": "2026-06-18 15:09:07", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:09:07", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -10, "y": -10}}
+{"timestamp": "2026-06-18 15:09:09", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_avoid_mountain"}}
+{"timestamp": "2026-06-18 15:09:09", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0311, "y": -0.0424, "theta": -1.3082}}
+{"timestamp": "2026-06-18 15:09:10", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 14, "y": -44}}
+{"timestamp": "2026-06-18 15:09:11", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0311, "y": -0.0424, "theta": 2.987}}
+{"timestamp": "2026-06-18 15:09:12", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0014, "y": -0.0377, "theta": 2.987}}
+{"timestamp": "2026-06-18 15:09:12", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:09:12", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -39, "y": 2}}
+{"timestamp": "2026-06-18 15:09:12", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0283, "y": -0.0331, "theta": 2.987}}
+{"timestamp": "2026-06-18 15:09:13", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -44, "y": 3}}
+{"timestamp": "2026-06-18 15:09:14", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0283, "y": -0.0331, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:14", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-18 15:09:14", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0526, "y": -0.0508, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:15", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0591, "y": -0.0556, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:16", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0187, "y": -0.0261, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:16", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:09:17", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0429, "y": -0.0438, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:17", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0583, "y": -0.055, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:19", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0195, "y": -0.0267, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:19", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:09:19", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0438, "y": -0.0444, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:20", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.068, "y": -0.0621, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:21", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0906, "y": -0.0786, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:21", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:09:21", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0979, "y": -0.0839, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:22", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0574, "y": -0.0544, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:23", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-18 15:09:23", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0817, "y": -0.0721, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:24", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0954, "y": -0.0821, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:25", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0549, "y": -0.0526, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:25", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-18 15:09:25", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0792, "y": -0.0703, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:26", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1026, "y": -0.0874, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:27", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0622, "y": -0.0579, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:27", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-18 15:09:28", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0864, "y": -0.0756, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:29", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.105, "y": -0.0891, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:29", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0646, "y": -0.0596, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:30", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-18 15:09:30", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0888, "y": -0.0773, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:31", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1123, "y": -0.0944, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:32", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0718, "y": -0.0649, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:32", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-18 15:09:32", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0961, "y": -0.0826, "theta": -2.5108}}
+{"timestamp": "2026-06-18 15:09:33", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": -16, "y": -13}}
+{"timestamp": "2026-06-18 15:09:36", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_avoid_crater"}}
+{"timestamp": "2026-06-18 15:09:36", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0453, "y": -0.1098, "theta": -1.4628}}
+{"timestamp": "2026-06-18 15:09:36", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 0, "y": -53}}
+{"timestamp": "2026-06-18 15:09:37", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0453, "y": -0.1098, "theta": -3.0925}}
+{"timestamp": "2026-06-18 15:09:38", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0753, "y": -0.1113, "theta": -3.0925}}
+{"timestamp": "2026-06-18 15:09:38", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:09:39", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1053, "y": -0.1128, "theta": -3.0925}}
+{"timestamp": "2026-06-18 15:09:39", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1353, "y": -0.1142, "theta": -3.0925}}
+{"timestamp": "2026-06-18 15:09:40", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1353, "y": -0.1142, "theta": -2.3071}}
+{"timestamp": "2026-06-18 15:09:40", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:09:41", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1353, "y": -0.1142, "theta": -1.5217}}
+{"timestamp": "2026-06-18 15:09:41", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -12, "y": -49}}
+{"timestamp": "2026-06-18 15:09:42", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1353, "y": -0.1142, "theta": -0.7363}}
+{"timestamp": "2026-06-18 15:09:43", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1353, "y": -0.1142, "theta": 0.0491}}
+{"timestamp": "2026-06-18 15:09:43", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:09:44", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1353, "y": -0.1142, "theta": 0.8345}}
+{"timestamp": "2026-06-18 15:09:45", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1353, "y": -0.1142, "theta": 1.6199}}
+{"timestamp": "2026-06-18 15:09:46", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1353, "y": -0.1142, "theta": 2.4053}}
+{"timestamp": "2026-06-18 15:09:46", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:09:47", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1353, "y": -0.1142, "theta": -3.0925}}
+{"timestamp": "2026-06-18 15:09:49", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-18 15:09:49", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1353, "y": -0.1142, "theta": 0.7339}}
+{"timestamp": "2026-06-18 15:09:51", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": -10, "y": -8}}
+{"timestamp": "2026-06-18 15:09:51", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-18 15:09:51", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1353, "y": -0.1142, "theta": 0.7339}}
+{"timestamp": "2026-06-18 15:09:51", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 9, "y": 9}}
+{"timestamp": "2026-06-18 15:09:52", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "evade_tape"}}
+{"timestamp": "2026-06-18 15:09:52", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1947, "y": -0.1678, "theta": 0.7339}}
+{"timestamp": "2026-06-18 15:09:52", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 3, "y": 4}}
+{"timestamp": "2026-06-18 15:09:53", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "evade_tape"}}
+{"timestamp": "2026-06-18 15:09:53", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.254, "y": -0.2213, "theta": 0.7339}}
+{"timestamp": "2026-06-18 15:09:54", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -3, "y": -2}}
+{"timestamp": "2026-06-18 15:09:54", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": -22, "y": -19}}
+{"timestamp": "2026-06-18 15:09:55", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "evade_tape"}}
+{"timestamp": "2026-06-18 15:09:55", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.3134, "y": -0.2749, "theta": 0.7339}}
+{"timestamp": "2026-06-18 15:09:55", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -8, "y": -7}}
+{"timestamp": "2026-06-18 15:09:55", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": -28, "y": -24}}
+{"timestamp": "2026-06-18 15:09:56", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "evade_tape"}}
+{"timestamp": "2026-06-18 15:09:56", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.3728, "y": -0.3284, "theta": 0.7339}}
+{"timestamp": "2026-06-18 15:09:56", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -15, "y": -13}}
+{"timestamp": "2026-06-18 15:09:56", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": -34, "y": -29}}
+{"timestamp": "2026-06-18 15:09:57", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "evade_tape"}}
+{"timestamp": "2026-06-18 15:09:57", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.4322, "y": -0.382, "theta": 0.7339}}
+{"timestamp": "2026-06-18 15:09:57", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": -40, "y": -35}}
+{"timestamp": "2026-06-18 15:09:58", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "evade_tape"}}
+{"timestamp": "2026-06-18 15:09:58", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.4916, "y": -0.4356, "theta": 0.7339}}
+{"timestamp": "2026-06-18 15:09:58", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -30, "y": -26}}
+{"timestamp": "2026-06-18 15:09:59", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -34, "y": -30}}
+{"timestamp": "2026-06-18 15:09:59", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": -45, "y": -40}}
+{"timestamp": "2026-06-18 15:09:59", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_avoid_crater"}}
+{"timestamp": "2026-06-18 15:10:00", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.5635, "y": -0.4305, "theta": 1.7819}}
+{"timestamp": "2026-06-18 15:10:00", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -62, "y": -19}}
+{"timestamp": "2026-06-18 15:10:00", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": -57, "y": -38}}
+{"timestamp": "2026-06-18 15:10:03", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_avoid_crater"}}
+{"timestamp": "2026-06-18 15:10:03", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.6038, "y": -0.4903, "theta": 2.8299}}
+{"timestamp": "2026-06-18 15:10:03", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -87, "y": -40}}
+{"timestamp": "2026-06-18 15:10:03", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": -65, "y": -47}}
+{"timestamp": "2026-06-18 15:10:05", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_avoid_crater"}}
+{"timestamp": "2026-06-18 15:10:05", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.5721, "y": -0.5551, "theta": -2.4053}}
+{"timestamp": "2026-06-18 15:10:06", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -78, "y": -74}}
+{"timestamp": "2026-06-18 15:10:06", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": -61, "y": -59}}
+{"timestamp": "2026-06-18 15:10:08", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_avoid_crater"}}
+{"timestamp": "2026-06-18 15:10:08", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.5001, "y": -0.56, "theta": -1.3573}}
+{"timestamp": "2026-06-18 15:10:08", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -44, "y": -84}}
+{"timestamp": "2026-06-18 15:19:01", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "boot"}}
+{"timestamp": "2026-06-18 15:19:01", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-18 15:19:02", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 2.3562}}
+{"timestamp": "2026-06-18 15:19:03", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 3.1416}}
+{"timestamp": "2026-06-18 15:19:03", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:04", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -2.3562}}
+{"timestamp": "2026-06-18 15:19:04", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -30, "y": -30}}
+{"timestamp": "2026-06-18 15:19:05", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -1.5708}}
+{"timestamp": "2026-06-18 15:19:06", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -0.7854}}
+{"timestamp": "2026-06-18 15:19:06", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:06", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 0.0}}
+{"timestamp": "2026-06-18 15:19:07", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 0.7854}}
+{"timestamp": "2026-06-18 15:19:08", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-18 15:19:08", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:11", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-18 15:19:11", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -1.8776}}
+{"timestamp": "2026-06-18 15:19:14", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0755, "y": -0.2384, "theta": -1.0922}}
+{"timestamp": "2026-06-18 15:19:14", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:15", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 7, "y": -52}}
+{"timestamp": "2026-06-18 15:19:15", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": -5, "y": -28}}
+{"timestamp": "2026-06-18 15:19:16", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "evade_tape"}}
+{"timestamp": "2026-06-18 15:19:16", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1123, "y": -0.1674, "theta": -1.0922}}
+{"timestamp": "2026-06-18 15:19:17", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1123, "y": -0.1674, "theta": -0.3068}}
+{"timestamp": "2026-06-18 15:19:17", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:17", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1123, "y": -0.1674, "theta": 0.4786}}
+{"timestamp": "2026-06-18 15:19:18", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1123, "y": -0.1674, "theta": 1.264}}
+{"timestamp": "2026-06-18 15:19:19", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1123, "y": -0.1674, "theta": 2.0494}}
+{"timestamp": "2026-06-18 15:19:19", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:20", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1123, "y": -0.1674, "theta": 2.8348}}
+{"timestamp": "2026-06-18 15:19:21", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1123, "y": -0.1674, "theta": -2.663}}
+{"timestamp": "2026-06-18 15:19:22", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1123, "y": -0.1674, "theta": -1.8776}}
+{"timestamp": "2026-06-18 15:19:22", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:23", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1123, "y": -0.1674, "theta": -1.0922}}
+{"timestamp": "2026-06-18 15:19:23", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 9, "y": -55}}
+{"timestamp": "2026-06-18 15:19:25", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-18 15:19:25", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1123, "y": -0.1674, "theta": 1.3916}}
+{"timestamp": "2026-06-18 15:19:28", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0678, "y": 0.0787, "theta": 1.3916}}
+{"timestamp": "2026-06-18 15:19:28", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:29", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0678, "y": 0.0787, "theta": 2.177}}
+{"timestamp": "2026-06-18 15:19:30", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0678, "y": 0.0787, "theta": 2.9624}}
+{"timestamp": "2026-06-18 15:19:30", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -23, "y": 11}}
+{"timestamp": "2026-06-18 15:19:30", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-18 15:19:31", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0973, "y": 0.084, "theta": 2.9624}}
+{"timestamp": "2026-06-18 15:19:31", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1269, "y": 0.0894, "theta": 2.9624}}
+{"timestamp": "2026-06-18 15:19:32", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1485, "y": 0.0933, "theta": 2.9624}}
+{"timestamp": "2026-06-18 15:19:32", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:32", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1583, "y": 0.0951, "theta": 2.9624}}
+{"timestamp": "2026-06-18 15:19:33", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1811, "y": 0.0992, "theta": 2.9624}}
+{"timestamp": "2026-06-18 15:19:34", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.191, "y": 0.101, "theta": 2.9624}}
+{"timestamp": "2026-06-18 15:19:34", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.2088, "y": 0.1042, "theta": 2.9624}}
+{"timestamp": "2026-06-18 15:19:34", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:35", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.2137, "y": 0.1051, "theta": 2.9624}}
+{"timestamp": "2026-06-18 15:19:35", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.2354, "y": 0.109, "theta": 2.9624}}
+{"timestamp": "2026-06-18 15:19:36", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.2599, "y": 0.1135, "theta": 2.9624}}
+{"timestamp": "2026-06-18 15:19:36", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": -31, "y": 12}}
+{"timestamp": "2026-06-18 15:19:36", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-18 15:19:36", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -66, "y": 19}}
+{"timestamp": "2026-06-18 15:19:39", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_avoid_crater"}}
+{"timestamp": "2026-06-18 15:19:39", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.2199, "y": 0.0534, "theta": -2.2727}}
+{"timestamp": "2026-06-18 15:19:42", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.2199, "y": 0.0534, "theta": 0.6872}}
+{"timestamp": "2026-06-18 15:19:42", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:42", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1967, "y": 0.0725, "theta": 0.6872}}
+{"timestamp": "2026-06-18 15:19:43", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1735, "y": 0.0916, "theta": 0.6872}}
+{"timestamp": "2026-06-18 15:19:44", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1735, "y": 0.0916, "theta": 1.4726}}
+{"timestamp": "2026-06-18 15:19:44", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:45", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1735, "y": 0.0916, "theta": 2.258}}
+{"timestamp": "2026-06-18 15:19:46", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1735, "y": 0.0916, "theta": 3.0434}}
+{"timestamp": "2026-06-18 15:19:47", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1735, "y": 0.0916, "theta": -2.4544}}
+{"timestamp": "2026-06-18 15:19:47", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:47", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1735, "y": 0.0916, "theta": -1.669}}
+{"timestamp": "2026-06-18 15:19:48", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1735, "y": 0.0916, "theta": -0.8836}}
+{"timestamp": "2026-06-18 15:19:49", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1735, "y": 0.0916, "theta": -0.0982}}
+{"timestamp": "2026-06-18 15:19:49", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:19:50", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1735, "y": 0.0916, "theta": 0.6872}}
+{"timestamp": "2026-06-18 15:23:46", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "boot"}}
+{"timestamp": "2026-06-18 15:23:46", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-18 15:23:47", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 2.3562}}
+{"timestamp": "2026-06-18 15:23:48", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 3.1416}}
+{"timestamp": "2026-06-18 15:23:48", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:23:49", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -2.3562}}
+{"timestamp": "2026-06-18 15:23:49", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -25, "y": -25}}
+{"timestamp": "2026-06-18 15:23:50", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -1.5708}}
+{"timestamp": "2026-06-18 15:23:51", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -0.7854}}
+{"timestamp": "2026-06-18 15:23:51", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:23:51", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 0.0}}
+{"timestamp": "2026-06-18 15:23:52", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 0.7854}}
+{"timestamp": "2026-06-18 15:23:53", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-18 15:23:53", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:23:55", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-18 15:23:55", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 0.1865}}
+{"timestamp": "2026-06-18 15:23:58", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2457, "y": 0.0464, "theta": 0.1865}}
+{"timestamp": "2026-06-18 15:23:58", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:23:59", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2457, "y": 0.0464, "theta": 0.9719}}
+{"timestamp": "2026-06-18 15:23:59", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2457, "y": 0.0464, "theta": 1.7573}}
+{"timestamp": "2026-06-18 15:24:00", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2457, "y": 0.0464, "theta": 2.5427}}
+{"timestamp": "2026-06-18 15:24:00", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:24:01", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2457, "y": 0.0464, "theta": -2.9551}}
+{"timestamp": "2026-06-18 15:24:02", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2457, "y": 0.0464, "theta": -2.1697}}
+{"timestamp": "2026-06-18 15:24:03", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2457, "y": 0.0464, "theta": -1.3843}}
+{"timestamp": "2026-06-18 15:24:03", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:24:04", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2457, "y": 0.0464, "theta": -0.5989}}
+{"timestamp": "2026-06-18 15:24:05", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2457, "y": 0.0464, "theta": 0.1865}}
+{"timestamp": "2026-06-18 15:24:05", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:24:07", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-18 15:24:07", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2457, "y": 0.0464, "theta": -2.0592}}
+{"timestamp": "2026-06-18 15:24:10", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1284, "y": -0.1744, "theta": -2.0592}}
+{"timestamp": "2026-06-18 15:24:10", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:24:11", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1284, "y": -0.1744, "theta": -1.2738}}
+{"timestamp": "2026-06-18 15:24:11", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1284, "y": -0.1744, "theta": -0.4884}}
+{"timestamp": "2026-06-18 15:24:13", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1284, "y": -0.1744, "theta": 0.297}}
+{"timestamp": "2026-06-18 15:24:13", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:24:13", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 47, "y": -7}}
+{"timestamp": "2026-06-18 15:24:14", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1284, "y": -0.1744, "theta": 1.0824}}
+{"timestamp": "2026-06-18 15:24:14", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1284, "y": -0.1744, "theta": 1.8678}}
+{"timestamp": "2026-06-18 15:24:15", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1284, "y": -0.1744, "theta": 2.6532}}
+{"timestamp": "2026-06-18 15:24:15", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:24:16", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1284, "y": -0.1744, "theta": -2.8446}}
+{"timestamp": "2026-06-18 15:24:16", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -3, "y": -22}}
+{"timestamp": "2026-06-18 15:24:17", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1284, "y": -0.1744, "theta": -2.0592}}
+{"timestamp": "2026-06-18 15:27:39", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "boot"}}
+{"timestamp": "2026-06-18 15:27:39", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-18 15:27:40", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 2.3562}}
+{"timestamp": "2026-06-18 15:27:41", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 3.1416}}
+{"timestamp": "2026-06-18 15:27:41", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:27:41", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -37, "y": 0}}
+{"timestamp": "2026-06-18 15:27:42", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -2.3562}}
+{"timestamp": "2026-06-18 15:27:42", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -9, "y": -9}}
+{"timestamp": "2026-06-18 15:27:43", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -1.5708}}
+{"timestamp": "2026-06-18 15:27:44", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -0.7854}}
+{"timestamp": "2026-06-18 15:27:44", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:27:45", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 0.0}}
+{"timestamp": "2026-06-18 15:27:46", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 0.7854}}
+{"timestamp": "2026-06-18 15:27:47", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-18 15:27:47", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:27:48", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-18 15:27:48", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 2.5329}}
+{"timestamp": "2026-06-18 15:27:51", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.2051, "y": 0.143, "theta": 2.5329}}
+{"timestamp": "2026-06-18 15:27:51", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:27:52", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.2051, "y": 0.143, "theta": -2.9649}}
+{"timestamp": "2026-06-18 15:27:52", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.2051, "y": 0.143, "theta": -2.1795}}
+{"timestamp": "2026-06-18 15:27:53", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.2051, "y": 0.143, "theta": -1.3941}}
+{"timestamp": "2026-06-18 15:27:53", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:27:53", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -14, "y": -20}}
+{"timestamp": "2026-06-18 15:27:54", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.2051, "y": 0.143, "theta": -0.6087}}
+{"timestamp": "2026-06-18 15:27:55", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.2051, "y": 0.143, "theta": 0.1767}}
+{"timestamp": "2026-06-18 15:27:55", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-18 15:27:56", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -2, "y": 18}}
+{"timestamp": "2026-06-18 15:27:56", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1756, "y": 0.1483, "theta": 0.1767}}
+{"timestamp": "2026-06-18 15:27:57", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.146, "y": 0.1535, "theta": 0.1767}}
+{"timestamp": "2026-06-18 15:27:57", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 10, "y": 20}}
+{"timestamp": "2026-06-18 15:27:57", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1164, "y": 0.1588, "theta": 0.1767}}
+{"timestamp": "2026-06-18 15:28:00", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_avoid_mountain"}}
+{"timestamp": "2026-06-18 15:28:00", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1748, "y": 0.2011, "theta": 1.2247}}
+{"timestamp": "2026-06-18 15:28:02", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1748, "y": 0.2011, "theta": -0.4197}}
+{"timestamp": "2026-06-18 15:28:02", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 11, "y": 7}}
+{"timestamp": "2026-06-18 15:28:02", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1474, "y": 0.1889, "theta": -0.4197}}
+{"timestamp": "2026-06-18 15:28:02", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:28:02", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -3, "y": 14}}
+{"timestamp": "2026-06-18 15:28:03", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.1199, "y": 0.1767, "theta": -0.4197}}
+{"timestamp": "2026-06-18 15:28:03", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 7, "y": 9}}
+{"timestamp": "2026-06-18 15:28:03", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0925, "y": 0.1644, "theta": -0.4197}}
+{"timestamp": "2026-06-18 15:28:03", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 17, "y": 5}}
+{"timestamp": "2026-06-18 15:28:05", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0376, "y": 0.1399, "theta": -0.4197}}
+{"timestamp": "2026-06-18 15:28:05", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:28:07", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0376, "y": 0.1399, "theta": 2.7219}}
+{"timestamp": "2026-06-18 15:28:07", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:28:08", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0651, "y": 0.1522, "theta": 2.7219}}
+{"timestamp": "2026-06-18 15:28:08", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0905, "y": 0.1635, "theta": 2.7219}}
+{"timestamp": "2026-06-18 15:28:10", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0905, "y": 0.1635, "theta": -2.7759}}
+{"timestamp": "2026-06-18 15:28:10", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:28:11", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.0905, "y": 0.1635, "theta": -1.9905}}
+{"timestamp": "2026-06-18 15:28:11", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -16, "y": 1}}
+{"timestamp": "2026-06-18 15:32:16", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.9635}}
+{"timestamp": "2026-06-18 15:32:17", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 2.7489}}
+{"timestamp": "2026-06-18 15:32:17", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:32:18", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -2.7489}}
+{"timestamp": "2026-06-18 15:32:19", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -1.9635}}
+{"timestamp": "2026-06-18 15:32:19", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:32:19", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -8, "y": -20}}
+{"timestamp": "2026-06-18 15:32:20", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -1.1781}}
+{"timestamp": "2026-06-18 15:32:22", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -0.3927}}
+{"timestamp": "2026-06-18 15:32:22", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:32:23", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 0.3927}}
+{"timestamp": "2026-06-18 15:32:25", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.1781}}
+{"timestamp": "2026-06-18 15:32:25", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:32:25", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-18 15:32:28", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-18 15:32:28", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -0.9793}}
+{"timestamp": "2026-06-18 15:32:30", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1394, "y": -0.2076, "theta": -0.9793}}
+{"timestamp": "2026-06-18 15:32:30", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:32:31", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 38, "y": -57}}
+{"timestamp": "2026-06-18 15:32:31", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1394, "y": -0.2076, "theta": -0.5866}}
+{"timestamp": "2026-06-18 15:32:31", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 28, "y": -30}}
+{"timestamp": "2026-06-18 15:32:32", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-18 15:32:32", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1394, "y": -0.2076, "theta": -0.5866}}
+{"timestamp": "2026-06-18 15:32:33", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1645, "y": -0.2242, "theta": -0.5866}}
+{"timestamp": "2026-06-18 15:32:33", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:32:33", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1895, "y": -0.2408, "theta": -0.5866}}
+{"timestamp": "2026-06-18 15:32:34", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1895, "y": -0.2408, "theta": -0.1939}}
+{"timestamp": "2026-06-18 15:32:35", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1895, "y": -0.2408, "theta": 0.5915}}
+{"timestamp": "2026-06-18 15:32:36", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:32:36", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1895, "y": -0.2408, "theta": 1.3769}}
+{"timestamp": "2026-06-18 15:32:38", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1895, "y": -0.2408, "theta": 2.1623}}
+{"timestamp": "2026-06-18 15:32:38", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-18 15:32:39", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1895, "y": -0.2408, "theta": 2.9477}}
+{"timestamp": "2026-06-18 15:32:39", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 14, "y": -23}}
+{"timestamp": "2026-06-18 15:32:42", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "evade_tape"}}
+{"timestamp": "2026-06-18 15:32:42", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.3152, "y": -0.2194, "theta": 0.6627}}
+{"timestamp": "2026-06-18 15:32:43", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.3152, "y": -0.2194, "theta": 1.0554}}
+{"timestamp": "2026-06-18 15:32:44", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.3152, "y": -0.2194, "theta": 1.8408}}
+{"timestamp": "2026-06-18 15:32:45", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.3152, "y": -0.2194, "theta": 2.2335}}
+{"timestamp": "2026-06-18 15:32:45", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:12:51", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "boot"}}
+{"timestamp": "2026-06-19 09:12:51", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-19 09:12:52", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.9635}}
+{"timestamp": "2026-06-19 09:12:52", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 2.3562}}
+{"timestamp": "2026-06-19 09:12:53", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 2.7489}}
+{"timestamp": "2026-06-19 09:12:53", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:12:54", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -2.7489}}
+{"timestamp": "2026-06-19 09:12:55", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -1.9635}}
+{"timestamp": "2026-06-19 09:12:55", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:12:56", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -1.1781}}
+{"timestamp": "2026-06-19 09:12:58", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -0.3927}}
+{"timestamp": "2026-06-19 09:12:58", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:12:59", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 0.3927}}
+{"timestamp": "2026-06-19 09:13:00", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.1781}}
+{"timestamp": "2026-06-19 09:13:00", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:13:01", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-19 09:13:01", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-19 09:13:04", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": 1.7598}}
+{"timestamp": "2026-06-19 09:13:04", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:13:04", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": 2.1525}}
+{"timestamp": "2026-06-19 09:13:05", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -26, "y": 57}}
+{"timestamp": "2026-06-19 09:13:06", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": 2.9379}}
+{"timestamp": "2026-06-19 09:13:06", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:13:06", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": -2.9526}}
+{"timestamp": "2026-06-19 09:13:07", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": -2.5599}}
+{"timestamp": "2026-06-19 09:13:08", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": -1.7745}}
+{"timestamp": "2026-06-19 09:13:08", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:13:08", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": -1.3818}}
+{"timestamp": "2026-06-19 09:13:09", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": -0.9891}}
+{"timestamp": "2026-06-19 09:13:10", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": -0.2037}}
+{"timestamp": "2026-06-19 09:13:11", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:13:11", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": 0.189}}
+{"timestamp": "2026-06-19 09:13:11", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": 0.5817}}
+{"timestamp": "2026-06-19 09:13:12", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": 1.3671}}
+{"timestamp": "2026-06-19 09:13:13", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 4, "y": 67}}
+{"timestamp": "2026-06-19 09:13:13", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:13:13", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": 1.7598}}
+{"timestamp": "2026-06-19 09:13:15", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-19 09:13:15", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": -0.047, "y": 0.2456, "theta": -0.0565}}
+{"timestamp": "2026-06-19 09:18:20", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "boot"}}
+{"timestamp": "2026-06-19 09:18:20", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-19 09:18:20", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.9635}}
+{"timestamp": "2026-06-19 09:18:21", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 2.7489}}
+{"timestamp": "2026-06-19 09:18:21", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:18:23", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -2.7489}}
+{"timestamp": "2026-06-19 09:18:24", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -1.9635}}
+{"timestamp": "2026-06-19 09:18:24", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:18:25", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -1.1781}}
+{"timestamp": "2026-06-19 09:18:26", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -0.3927}}
+{"timestamp": "2026-06-19 09:18:26", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:18:27", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 0.3927}}
+{"timestamp": "2026-06-19 09:18:28", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.1781}}
+{"timestamp": "2026-06-19 09:18:28", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:18:29", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-19 09:18:30", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-19 09:18:30", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.237}}
+{"timestamp": "2026-06-19 09:18:32", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0819, "y": 0.2362, "theta": 1.237}}
+{"timestamp": "2026-06-19 09:18:32", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:18:33", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0819, "y": 0.2362, "theta": 1.6297}}
+{"timestamp": "2026-06-19 09:18:34", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0819, "y": 0.2362, "theta": 2.4151}}
+{"timestamp": "2026-06-19 09:18:35", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:18:35", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0819, "y": 0.2362, "theta": 2.8078}}
+{"timestamp": "2026-06-19 09:18:35", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0819, "y": 0.2362, "theta": -3.0827}}
+{"timestamp": "2026-06-19 09:18:37", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-19 09:18:37", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0819, "y": 0.2362, "theta": -2.69}}
+{"timestamp": "2026-06-19 09:18:38", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_align_left"}}
+{"timestamp": "2026-06-19 09:18:38", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0729, "y": 0.2269, "theta": -2.339}}
+{"timestamp": "2026-06-19 09:18:38", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1077, "y": 0.2629, "theta": -2.339}}
+{"timestamp": "2026-06-19 09:18:39", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1077, "y": 0.2629, "theta": -1.9463}}
+{"timestamp": "2026-06-19 09:18:39", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:18:40", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1077, "y": 0.2629, "theta": -1.1609}}
+{"timestamp": "2026-06-19 09:18:41", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1077, "y": 0.2629, "theta": -0.3755}}
+{"timestamp": "2026-06-19 09:18:41", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:18:42", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1077, "y": 0.2629, "theta": 0.4099}}
+{"timestamp": "2026-06-19 09:18:44", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1077, "y": 0.2629, "theta": 1.1953}}
+{"timestamp": "2026-06-19 09:18:44", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:18:45", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1077, "y": 0.2629, "theta": 1.9807}}
+{"timestamp": "2026-06-19 09:18:46", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1077, "y": 0.2629, "theta": 2.7661}}
+{"timestamp": "2026-06-19 09:18:46", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:18:47", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1077, "y": 0.2629, "theta": -2.7317}}
+{"timestamp": "2026-06-19 09:18:49", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-19 09:18:49", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1077, "y": 0.2629, "theta": -2.339}}
+{"timestamp": "2026-06-19 09:18:49", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0868, "y": 0.2413, "theta": -2.339}}
+{"timestamp": "2026-06-19 09:18:50", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.066, "y": 0.2197, "theta": -2.339}}
+{"timestamp": "2026-06-19 09:18:50", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0451, "y": 0.1981, "theta": -2.339}}
+{"timestamp": "2026-06-19 09:18:51", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_align_left"}}
+{"timestamp": "2026-06-19 09:18:51", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0451, "y": 0.1981, "theta": -1.988}}
+{"timestamp": "2026-06-19 09:18:52", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0654, "y": 0.2439, "theta": -1.988}}
+{"timestamp": "2026-06-19 09:18:54", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-19 09:18:54", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0654, "y": 0.2439, "theta": -1.5953}}
+{"timestamp": "2026-06-19 09:18:54", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0646, "y": 0.2139, "theta": -1.5953}}
+{"timestamp": "2026-06-19 09:18:55", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0639, "y": 0.1838, "theta": -1.5953}}
+{"timestamp": "2026-06-19 09:18:55", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0632, "y": 0.1538, "theta": -1.5953}}
+{"timestamp": "2026-06-19 09:18:56", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_align_left"}}
+{"timestamp": "2026-06-19 09:18:56", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0663, "y": 0.1445, "theta": -1.2444}}
+{"timestamp": "2026-06-19 09:18:57", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0503, "y": 0.1919, "theta": -1.2444}}
+{"timestamp": "2026-06-19 09:18:58", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 31, "y": -10}}
+{"timestamp": "2026-06-19 09:18:58", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-19 09:18:59", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0503, "y": 0.1919, "theta": -0.8517}}
+{"timestamp": "2026-06-19 09:18:59", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0701, "y": 0.1693, "theta": -0.8517}}
+{"timestamp": "2026-06-19 09:19:00", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0899, "y": 0.1467, "theta": -0.8517}}
+{"timestamp": "2026-06-19 09:19:00", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_align_left"}}
+{"timestamp": "2026-06-19 09:19:00", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1011, "y": 0.1405, "theta": -0.5007}}
+{"timestamp": "2026-06-19 09:19:01", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0572, "y": 0.1646, "theta": -0.5007}}
+{"timestamp": "2026-06-19 09:19:01", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:01", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 44, "y": -5}}
+{"timestamp": "2026-06-19 09:19:02", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-19 09:19:02", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0572, "y": 0.1646, "theta": -0.5007}}
+{"timestamp": "2026-06-19 09:19:03", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0835, "y": 0.1501, "theta": -0.5007}}
+{"timestamp": "2026-06-19 09:19:04", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1099, "y": 0.1357, "theta": -0.5007}}
+{"timestamp": "2026-06-19 09:19:04", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:04", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_align_left"}}
+{"timestamp": "2026-06-19 09:19:04", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.126, "y": 0.1333, "theta": -0.1497}}
+{"timestamp": "2026-06-19 09:19:04", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 54, "y": 7}}
+{"timestamp": "2026-06-19 09:19:05", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0765, "y": 0.1407, "theta": -0.1497}}
+{"timestamp": "2026-06-19 09:19:06", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0765, "y": 0.1407, "theta": 0.243}}
+{"timestamp": "2026-06-19 09:19:06", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:07", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0765, "y": 0.1407, "theta": 1.0284}}
+{"timestamp": "2026-06-19 09:19:08", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0765, "y": 0.1407, "theta": 1.8138}}
+{"timestamp": "2026-06-19 09:19:08", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:09", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0765, "y": 0.1407, "theta": 2.5992}}
+{"timestamp": "2026-06-19 09:19:10", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0765, "y": 0.1407, "theta": -2.8986}}
+{"timestamp": "2026-06-19 09:19:10", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:12", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-19 09:19:12", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0765, "y": 0.1407, "theta": -2.5059}}
+{"timestamp": "2026-06-19 09:19:13", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_align_left"}}
+{"timestamp": "2026-06-19 09:19:13", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0644, "y": 0.1224, "theta": -2.1549}}
+{"timestamp": "2026-06-19 09:19:13", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -2.1549}}
+{"timestamp": "2026-06-19 09:19:14", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -1.7622}}
+{"timestamp": "2026-06-19 09:19:15", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -0.9768}}
+{"timestamp": "2026-06-19 09:19:15", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:16", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -0.1914}}
+{"timestamp": "2026-06-19 09:19:18", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": 0.594}}
+{"timestamp": "2026-06-19 09:19:18", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:19", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": 1.3794}}
+{"timestamp": "2026-06-19 09:19:19", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 17, "y": 57}}
+{"timestamp": "2026-06-19 09:19:20", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": 2.1648}}
+{"timestamp": "2026-06-19 09:19:20", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:21", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": 2.9502}}
+{"timestamp": "2026-06-19 09:19:22", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -2.5476}}
+{"timestamp": "2026-06-19 09:19:22", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:23", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -2.1549}}
+{"timestamp": "2026-06-19 09:19:24", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-19 09:19:24", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -0.4835}}
+{"timestamp": "2026-06-19 09:19:26", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 14, "y": 14}}
+{"timestamp": "2026-06-19 09:19:26", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:19:26", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -0.4835}}
+{"timestamp": "2026-06-19 09:19:26", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 39, "y": 1}}
+{"timestamp": "2026-06-19 09:19:26", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -0.0908}}
+{"timestamp": "2026-06-19 09:19:26", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 42, "y": 13}}
+{"timestamp": "2026-06-19 09:19:27", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 41, "y": 26}}
+{"timestamp": "2026-06-19 09:19:27", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": 0.6946}}
+{"timestamp": "2026-06-19 09:19:28", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 36, "y": 39}}
+{"timestamp": "2026-06-19 09:19:28", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:28", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": 1.0873}}
+{"timestamp": "2026-06-19 09:19:28", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 25, "y": 46}}
+{"timestamp": "2026-06-19 09:19:29", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": 1.48}}
+{"timestamp": "2026-06-19 09:19:29", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 12, "y": 52}}
+{"timestamp": "2026-06-19 09:19:29", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 1, "y": 44}}
+{"timestamp": "2026-06-19 09:19:30", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": 2.2654}}
+{"timestamp": "2026-06-19 09:19:30", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:30", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": 2.6581}}
+{"timestamp": "2026-06-19 09:19:31", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -25, "y": 34}}
+{"timestamp": "2026-06-19 09:19:31", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": 3.0508}}
+{"timestamp": "2026-06-19 09:19:31", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -29, "y": 20}}
+{"timestamp": "2026-06-19 09:19:32", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -28, "y": 5}}
+{"timestamp": "2026-06-19 09:19:32", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -2.447}}
+{"timestamp": "2026-06-19 09:19:32", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -20, "y": -8}}
+{"timestamp": "2026-06-19 09:19:33", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:33", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -2.0543}}
+{"timestamp": "2026-06-19 09:19:33", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -9, "y": -17}}
+{"timestamp": "2026-06-19 09:19:33", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -1.6616}}
+{"timestamp": "2026-06-19 09:19:33", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 6, "y": -23}}
+{"timestamp": "2026-06-19 09:19:34", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 21, "y": -21}}
+{"timestamp": "2026-06-19 09:19:34", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -0.8762}}
+{"timestamp": "2026-06-19 09:19:34", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 33, "y": -12}}
+{"timestamp": "2026-06-19 09:19:35", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:35", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -0.4835}}
+{"timestamp": "2026-06-19 09:19:35", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 45, "y": -2}}
+{"timestamp": "2026-06-19 09:19:36", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-19 09:19:36", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.092, "y": 0.1642, "theta": -1.6493}}
+{"timestamp": "2026-06-19 09:19:39", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0724, "y": -0.0851, "theta": -1.6493}}
+{"timestamp": "2026-06-19 09:19:39", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:39", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 4, "y": -52}}
+{"timestamp": "2026-06-19 09:19:40", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0724, "y": -0.0851, "theta": -1.2566}}
+{"timestamp": "2026-06-19 09:19:41", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0724, "y": -0.0851, "theta": -0.4712}}
+{"timestamp": "2026-06-19 09:19:41", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:41", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0724, "y": -0.0851, "theta": -0.0785}}
+{"timestamp": "2026-06-19 09:19:42", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0724, "y": -0.0851, "theta": 0.3142}}
+{"timestamp": "2026-06-19 09:19:43", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0724, "y": -0.0851, "theta": 1.0996}}
+{"timestamp": "2026-06-19 09:19:43", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 13, "y": 2}}
+{"timestamp": "2026-06-19 09:19:44", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:19:44", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0724, "y": -0.0851, "theta": 1.4923}}
+{"timestamp": "2026-06-19 09:19:44", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0724, "y": -0.0851, "theta": 1.885}}
+{"timestamp": "2026-06-19 09:19:44", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 6, "y": -4}}
+{"timestamp": "2026-06-19 09:19:48", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 10, "y": -21}}
+{"timestamp": "2026-06-19 09:19:48", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:19:48", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0971, "y": -0.1611, "theta": -1.5978}}
+{"timestamp": "2026-06-19 09:19:51", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 12, "y": -3}}
+{"timestamp": "2026-06-19 09:19:51", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:19:51", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0993, "y": -0.0812, "theta": 1.2296}}
+{"timestamp": "2026-06-19 09:19:54", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:19:54", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0725, "y": -0.1565, "theta": -1.0848}}
+{"timestamp": "2026-06-19 09:19:54", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 21, "y": -41}}
+{"timestamp": "2026-06-19 09:19:58", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 0, "y": -5}}
+{"timestamp": "2026-06-19 09:19:58", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:19:58", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0352, "y": -0.0858, "theta": 2.4642}}
+{"timestamp": "2026-06-19 09:19:58", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -20, "y": 10}}
+{"timestamp": "2026-06-19 09:20:01", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:01", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0975, "y": -0.136, "theta": -1.0971}}
+{"timestamp": "2026-06-19 09:20:01", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 23, "y": -39}}
+{"timestamp": "2026-06-19 09:20:04", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 1, "y": -8}}
+{"timestamp": "2026-06-19 09:20:04", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:04", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.061, "y": -0.0648, "theta": -2.8569}}
+{"timestamp": "2026-06-19 09:20:04", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -20, "y": -14}}
+{"timestamp": "2026-06-19 09:20:07", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 15, "y": 1}}
+{"timestamp": "2026-06-19 09:20:07", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:07", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1378, "y": -0.0423, "theta": 1.2665}}
+{"timestamp": "2026-06-19 09:20:07", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 23, "y": 24}}
+{"timestamp": "2026-06-19 09:20:09", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 6, "y": -11}}
+{"timestamp": "2026-06-19 09:20:09", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:09", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1138, "y": -0.1186, "theta": 2.9624}}
+{"timestamp": "2026-06-19 09:20:10", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -16, "y": -7}}
+{"timestamp": "2026-06-19 09:20:13", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 24, "y": -15}}
+{"timestamp": "2026-06-19 09:20:13", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:13", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1925, "y": -0.1329, "theta": -0.3043}}
+{"timestamp": "2026-06-19 09:20:13", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 51, "y": -23}}
+{"timestamp": "2026-06-19 09:20:16", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 8, "y": -8}}
+{"timestamp": "2026-06-19 09:20:17", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:17", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1162, "y": -0.1089, "theta": 2.4544}}
+{"timestamp": "2026-06-19 09:20:17", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -9, "y": 6}}
+{"timestamp": "2026-06-19 09:20:20", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 21, "y": -20}}
+{"timestamp": "2026-06-19 09:20:20", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:20", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.178, "y": -0.1596, "theta": -0.9106}}
+{"timestamp": "2026-06-19 09:20:20", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 38, "y": -42}}
+{"timestamp": "2026-06-19 09:20:23", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:23", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.129, "y": -0.0965, "theta": -2.8201}}
+{"timestamp": "2026-06-19 09:20:23", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -25, "y": -22}}
+{"timestamp": "2026-06-19 09:20:26", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 25, "y": -7}}
+{"timestamp": "2026-06-19 09:20:26", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:26", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2048, "y": -0.0712, "theta": -0.0442}}
+{"timestamp": "2026-06-19 09:20:27", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 63, "y": -9}}
+{"timestamp": "2026-06-19 09:20:30", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:30", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1249, "y": -0.0677, "theta": -3.1048}}
+{"timestamp": "2026-06-19 09:20:34", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "evade_tape"}}
+{"timestamp": "2026-06-19 09:20:34", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2606, "y": -0.0867, "theta": -0.3755}}
+{"timestamp": "2026-06-19 09:20:35", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2606, "y": -0.0867, "theta": 0.0172}}
+{"timestamp": "2026-06-19 09:20:36", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2606, "y": -0.0867, "theta": 0.8026}}
+{"timestamp": "2026-06-19 09:20:36", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:20:36", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2606, "y": -0.0867, "theta": 1.1953}}
+{"timestamp": "2026-06-19 09:20:37", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 36, "y": 17}}
+{"timestamp": "2026-06-19 09:20:37", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 28, "y": -4}}
+{"timestamp": "2026-06-19 09:20:40", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:40", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2313, "y": -0.1611, "theta": -2.663}}
+{"timestamp": "2026-06-19 09:20:40", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 16, "y": -20}}
+{"timestamp": "2026-06-19 09:20:43", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 32, "y": -8}}
+{"timestamp": "2026-06-19 09:20:43", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:43", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.3023, "y": -0.1243, "theta": 1.2689}}
+{"timestamp": "2026-06-19 09:20:43", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 37, "y": 8}}
+{"timestamp": "2026-06-19 09:20:46", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 29, "y": -25}}
+{"timestamp": "2026-06-19 09:20:46", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:46", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2785, "y": -0.2006, "theta": -1.3794}}
+{"timestamp": "2026-06-19 09:20:46", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 29, "y": -25}}
+{"timestamp": "2026-06-19 09:20:49", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:49", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2633, "y": -0.1221, "theta": 1.1953}}
+{"timestamp": "2026-06-19 09:20:53", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 22, "y": -25}}
+{"timestamp": "2026-06-19 09:20:53", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:53", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.234, "y": -0.1965, "theta": -1.8089}}
+{"timestamp": "2026-06-19 09:20:57", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:20:57", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2528, "y": -0.1188, "theta": 1.7279}}
+{"timestamp": "2026-06-19 09:20:57", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 22, "y": 9}}
+{"timestamp": "2026-06-19 09:21:00", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "evade_tape"}}
+{"timestamp": "2026-06-19 09:21:00", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2282, "y": -0.2449, "theta": -2.2384}}
+{"timestamp": "2026-06-19 09:21:01", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_detected"}}
+{"timestamp": "2026-06-19 09:21:01", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2282, "y": -0.2449, "theta": -2.2384}}
+{"timestamp": "2026-06-19 09:21:02", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 18, "y": -31}}
+{"timestamp": "2026-06-19 09:21:04", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "approach_avoid_mountain"}}
+{"timestamp": "2026-06-19 09:21:04", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.3, "y": -0.2377, "theta": -1.1904}}
+{"timestamp": "2026-06-19 09:21:05", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 33, "y": -27}}
+{"timestamp": "2026-06-19 09:21:05", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:05", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.3, "y": -0.2377, "theta": -0.8394}}
+{"timestamp": "2026-06-19 09:21:05", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 36, "y": -30}}
+{"timestamp": "2026-06-19 09:21:07", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 28, "y": -14}}
+{"timestamp": "2026-06-19 09:21:07", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:07", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2466, "y": -0.1782, "theta": 0.7805}}
+{"timestamp": "2026-06-19 09:21:07", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 28, "y": -14}}
+{"timestamp": "2026-06-19 09:21:10", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 14, "y": -24}}
+{"timestamp": "2026-06-19 09:21:10", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:10", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1897, "y": -0.2345, "theta": -3.0778}}
+{"timestamp": "2026-06-19 09:21:14", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 32, "y": -22}}
+{"timestamp": "2026-06-19 09:21:14", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:14", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2695, "y": -0.2294, "theta": 0.1252}}
+{"timestamp": "2026-06-19 09:21:14", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 60, "y": -19}}
+{"timestamp": "2026-06-19 09:21:17", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:17", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1902, "y": -0.2393, "theta": -2.3586}}
+{"timestamp": "2026-06-19 09:21:18", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -3, "y": -46}}
+{"timestamp": "2026-06-19 09:21:20", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:20", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2469, "y": -0.1829, "theta": 1.6371}}
+{"timestamp": "2026-06-19 09:21:21", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 23, "y": 10}}
+{"timestamp": "2026-06-19 09:21:24", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "evade_tape"}}
+{"timestamp": "2026-06-19 09:21:24", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2202, "y": -0.3134, "theta": -2.1328}}
+{"timestamp": "2026-06-19 09:21:25", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2202, "y": -0.3134, "theta": -1.7401}}
+{"timestamp": "2026-06-19 09:21:25", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 15, "y": -75}}
+{"timestamp": "2026-06-19 09:21:26", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 31, "y": -72}}
+{"timestamp": "2026-06-19 09:21:26", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2202, "y": -0.3134, "theta": -0.9547}}
+{"timestamp": "2026-06-19 09:21:26", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 46, "y": -66}}
+{"timestamp": "2026-06-19 09:21:27", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:21:27", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2202, "y": -0.3134, "theta": -0.5621}}
+{"timestamp": "2026-06-19 09:21:27", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 58, "y": -54}}
+{"timestamp": "2026-06-19 09:21:27", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2202, "y": -0.3134, "theta": -0.1694}}
+{"timestamp": "2026-06-19 09:21:27", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 27, "y": -32}}
+{"timestamp": "2026-06-19 09:21:31", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 10, "y": -27}}
+{"timestamp": "2026-06-19 09:21:31", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:31", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1414, "y": -0.3, "theta": 2.609}}
+{"timestamp": "2026-06-19 09:21:34", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 22, "y": -39}}
+{"timestamp": "2026-06-19 09:21:34", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:34", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2103, "y": -0.3406, "theta": -1.4162}}
+{"timestamp": "2026-06-19 09:21:34", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 27, "y": -74}}
+{"timestamp": "2026-06-19 09:21:37", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:37", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.198, "y": -0.2616, "theta": 1.426}}
+{"timestamp": "2026-06-19 09:21:40", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 14, "y": -34}}
+{"timestamp": "2026-06-19 09:21:40", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:40", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1865, "y": -0.3407, "theta": 3.0361}}
+{"timestamp": "2026-06-19 09:21:40", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -21, "y": -30}}
+{"timestamp": "2026-06-19 09:21:43", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 29, "y": -40}}
+{"timestamp": "2026-06-19 09:21:43", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:43", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.266, "y": -0.3491, "theta": -1.1658}}
+{"timestamp": "2026-06-19 09:21:43", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 41, "y": -69}}
+{"timestamp": "2026-06-19 09:21:45", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:46", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2345, "y": -0.2756, "theta": 3.1097}}
+{"timestamp": "2026-06-19 09:21:46", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -15, "y": -26}}
+{"timestamp": "2026-06-19 09:21:48", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:48", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.3144, "y": -0.2782, "theta": 1.3254}}
+{"timestamp": "2026-06-19 09:21:48", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 40, "y": 8}}
+{"timestamp": "2026-06-19 09:21:51", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 33, "y": -39}}
+{"timestamp": "2026-06-19 09:21:51", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:51", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.295, "y": -0.3557, "theta": -0.7731}}
+{"timestamp": "2026-06-19 09:21:51", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 56, "y": -62}}
+{"timestamp": "2026-06-19 09:21:54", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": 19, "y": -32}}
+{"timestamp": "2026-06-19 09:21:54", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:21:54", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.2377, "y": -0.2999, "theta": -2.6949}}
+{"timestamp": "2026-06-19 09:26:24", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "boot"}}
+{"timestamp": "2026-06-19 09:26:24", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-19 09:26:24", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.9635}}
+{"timestamp": "2026-06-19 09:26:25", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 2.7489}}
+{"timestamp": "2026-06-19 09:26:26", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:26:27", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -2.7489}}
+{"timestamp": "2026-06-19 09:26:28", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -1.9635}}
+{"timestamp": "2026-06-19 09:26:28", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:26:29", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -1.1781}}
+{"timestamp": "2026-06-19 09:26:30", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": -0.3927}}
+{"timestamp": "2026-06-19 09:26:30", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:26:31", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 0.3927}}
+{"timestamp": "2026-06-19 09:26:32", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.1781}}
+{"timestamp": "2026-06-19 09:26:32", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:26:33", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 1.5708}}
+{"timestamp": "2026-06-19 09:26:34", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-19 09:26:34", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0, "y": 0.0, "theta": 0.6897}}
+{"timestamp": "2026-06-19 09:26:37", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": 0.6897}}
+{"timestamp": "2026-06-19 09:26:37", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:26:37", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": 1.0824}}
+{"timestamp": "2026-06-19 09:26:38", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": 1.8678}}
+{"timestamp": "2026-06-19 09:26:39", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:26:39", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": 2.2605}}
+{"timestamp": "2026-06-19 09:26:40", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": 2.6532}}
+{"timestamp": "2026-06-19 09:26:41", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": -2.8446}}
+{"timestamp": "2026-06-19 09:26:41", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:26:41", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": -2.4519}}
+{"timestamp": "2026-06-19 09:26:42", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": -2.0592}}
+{"timestamp": "2026-06-19 09:26:43", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": -1.2738}}
+{"timestamp": "2026-06-19 09:26:44", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:26:44", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": -0.8811}}
+{"timestamp": "2026-06-19 09:26:44", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": -0.4884}}
+{"timestamp": "2026-06-19 09:26:45", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": 0.297}}
+{"timestamp": "2026-06-19 09:26:46", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:26:46", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": 0.6897}}
+{"timestamp": "2026-06-19 09:26:49", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-19 09:26:49", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1929, "y": 0.1591, "theta": -2.2408}}
+{"timestamp": "2026-06-19 09:26:51", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": -2.2408}}
+{"timestamp": "2026-06-19 09:26:51", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:26:52", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": -1.8481}}
+{"timestamp": "2026-06-19 09:26:53", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": -1.0627}}
+{"timestamp": "2026-06-19 09:26:54", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:26:54", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": -0.67}}
+{"timestamp": "2026-06-19 09:26:54", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": -0.2773}}
+{"timestamp": "2026-06-19 09:26:55", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": 0.5081}}
+{"timestamp": "2026-06-19 09:26:56", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:26:56", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": 0.9008}}
+{"timestamp": "2026-06-19 09:26:57", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": 1.2935}}
+{"timestamp": "2026-06-19 09:26:58", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": 2.0789}}
+{"timestamp": "2026-06-19 09:26:58", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:26:58", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": 2.4715}}
+{"timestamp": "2026-06-19 09:26:59", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": 2.8642}}
+{"timestamp": "2026-06-19 09:27:00", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": -2.6335}}
+{"timestamp": "2026-06-19 09:27:00", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:27:01", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": -2.2408}}
+{"timestamp": "2026-06-19 09:27:02", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "roaming"}}
+{"timestamp": "2026-06-19 09:27:02", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": -2.9919}}
+{"timestamp": "2026-06-19 09:27:03", "sender_id": "66", "data": {"type": "black_tape", "robot": "r1", "x": -1, "y": -4}}
+{"timestamp": "2026-06-19 09:27:03", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "tape_avoidance"}}
+{"timestamp": "2026-06-19 09:27:03", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": -2.9919}}
+{"timestamp": "2026-06-19 09:27:04", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": -2.5992}}
+{"timestamp": "2026-06-19 09:27:05", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": -1.8138}}
+{"timestamp": "2026-06-19 09:27:05", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "alive"}}
+{"timestamp": "2026-06-19 09:27:05", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": -1.4211}}
+{"timestamp": "2026-06-19 09:27:06", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.0376, "y": -0.0369, "theta": -1.0284}}

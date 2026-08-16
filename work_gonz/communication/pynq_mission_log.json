@@ -1,0 +1,16 @@
+{"timestamp": "2026-06-17 22:18:00", "sender_id": "66", "data": {"type": "ROCK", "x": "15", "y": "-25", "color": "Red", "size": 6, "temp": 23.4}}
+{"timestamp": "2026-06-17 22:18:00", "sender_id": "66", "data": {"type": "ROCK", "x": "40", "y": "10", "color": "Blue", "size": 3, "temp": 21.0}}
+{"timestamp": "2026-06-17 22:18:00", "sender_id": "6", "data": {"type": "ROCK", "x": "-30", "y": "35", "color": "Unknown", "size": 0, "temp": 19.5}}
+{"timestamp": "2026-06-17 22:18:00", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1, "y": 0.2, "theta": 1.5708}}
+{"timestamp": "2026-06-17 22:18:00", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "cube_located"}}
+{"timestamp": "2026-06-17 22:50:11", "sender_id": "66", "data": {"type": "ROCK", "x": "15", "y": "-25", "color": "Red", "size": 6, "temp": 23.4}}
+{"timestamp": "2026-06-17 22:50:11", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1, "y": 0.2, "theta": 1.57}}
+{"timestamp": "2026-06-17 22:50:11", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "color_low_confidence_retry"}}
+{"timestamp": "2026-06-17 22:50:11", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": 30, "y": 40}}
+{"timestamp": "2026-06-17 23:32:56", "sender_id": "66", "data": {"type": "ROCK", "x": "15", "y": "-25", "color": "Green", "size": 6, "temp": 22.1}}
+{"timestamp": "2026-06-17 23:32:56", "sender_id": "66", "data": {"type": "ROCK", "x": "40", "y": "5", "color": "Blue", "size": 3, "temp": 20.4}}
+{"timestamp": "2026-06-17 23:32:56", "sender_id": "66", "data": {"type": "mountain", "robot": "r1", "x": -30, "y": 40}}
+{"timestamp": "2026-06-17 23:32:56", "sender_id": "6", "data": {"type": "black_tape", "robot": "r2", "x": 60, "y": 60}}
+{"timestamp": "2026-06-17 23:32:56", "sender_id": "6", "data": {"type": "crater", "robot": "r2", "x": 10, "y": 10}}
+{"timestamp": "2026-06-17 23:32:56", "sender_id": "66", "data": {"type": "pose", "robot": "r1", "x": 0.1, "y": 0.2, "theta": 1.57}}
+{"timestamp": "2026-06-19 09:04:45", "sender_id": "66", "data": {"type": "status", "robot": "r1", "mode": "explore", "detail": "boot"}}

@@ -5,24 +5,38 @@ __pycache__/
 .venv/
 venv/
 env/
+ENV/
 .python-version
 *.egg-info/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 
-# Arduino build outputs
+# C / Arduino build artifacts
+*.o
+*.d
+*.obj
+*.exe
 *.hex
 *.elf
 *.bin
 build/
 dist/
 out/
-
-# C build artifacts
-*.o
-*.d
 NTC_testing/NTC_testing/main
+
+# PYNQ / Vivado
+.Xil/
+.cache/
+.runs/
+.sim/
+.ip_user_files/
+.hw/
+*.jou
+*.str
+
+# Node (defensive)
+node_modules/
 
 # Editors / IDE
 .vscode/
